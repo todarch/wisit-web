@@ -58,7 +58,7 @@ jobs:
           name: Setup Environment Variables
           command: |
             echo "export TAG_SUFFIX=$(date +%Y%m%d%H%M%S)" >> $BASH_ENV
-            echo 'export IMAGE="todarch/ui:${CIRCLE_BRANCH}-${TAG_SUFFIX}"' >> $BASH_ENV
+            echo 'export IMAGE="todarch/wisit-web:${CIRCLE_BRANCH}-${TAG_SUFFIX}"' >> $BASH_ENV
       - run:
           name: Publish docker image
           command: |
