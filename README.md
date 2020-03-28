@@ -25,3 +25,17 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+## initial setup
+
+```shell 
+ng add @angular/material # purple, YES, YES
+ng g m material
+ng generate @angular/material:navigation nav
+ng g c not-found
+ng g c footer
+ng g c welcome
+ng g m game --routing
+ng g m shared
+```
