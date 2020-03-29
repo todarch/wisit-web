@@ -21,6 +21,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     CommonModule
   ],
   exports: [
+    FlexLayoutModule,
     MatInputModule,
     MatButtonModule,
     MatSelectModule,

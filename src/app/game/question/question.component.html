@@ -1,1 +1,16 @@
-<p>question works!</p>
+<mat-card class="question-card">
+  <mat-card-actions class="question-choices">
+    <button mat-button class="choice-button">{{simpleQuestion.choices[0] | uppercase}}</button>
+    <button mat-button class="choice-button">{{simpleQuestion.choices[1] | uppercase}}</button>
+  </mat-card-actions>
+  <img mat-card-image
+       style="max-height: 520px"
+       src="{{simpleQuestion.picUrl}}"
+       alt="Photo of a Shiba Inu">
+  <mat-card-content>
+  </mat-card-content>
+  <mat-card-actions class="question-choices">
+    <button mat-button class="choice-button">{{simpleQuestion.choices[2] | uppercase}}</button>
+    <button mat-button class="choice-button">{{simpleQuestion.choices[3] | uppercase}}</button>
+  </mat-card-actions>
+</mat-card>

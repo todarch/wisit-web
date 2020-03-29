@@ -1,5 +1,5 @@
 <div class="header-headline">
-  <h1 class="mat-h1">Where is it?</h1>
+  <h1 class="mat-h1">Where IS IT?</h1>
 <!--  <h2 style="font-size: 18px; font-weight: 300; line-height: 28px; margin: 15px 0 25px;">-->
 <!--    How much of the world have you seen even virtually?-->
 <!--  </h2>-->
@@ -7,8 +7,49 @@
     How well do you know the world around yourself?
   </h2>
 
-
   <button mat-raised-button [routerLink]="['/game']">
     Play now
   </button>
 </div>
+
+<main>
+  <div fxLayout="row" fxLayoutGap="25px" class="row">
+    <div class="row-img">
+      <img src="assets/img/globe-trotter.jpg">
+    </div>
+    <div class="row-desc">
+      <h2>Where to go next?</h2>
+      <p>Traveling possibilities are better than ever. What if you could discover your next destination while refreshing your memory.</p>
+    </div>
+  </div>
+
+  <div fxLayout="row-reverse" fxLayoutGap="25px" class="row">
+    <div class="row-img">
+      <img src="assets/img/photographer.jpg">
+    </div>
+    <div class="row-desc">
+      <h2>A picture is worth a thousand words</h2>
+      <p>Do you pay attention to the details in pictures? Do you associate a picture naturally with a culture/city/country?
+      Can you spot enough details in a picture to recognize the location?</p>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="25px" class="row">
+    <div class="row-img">
+      <img src="assets/img/question-mark.jpg">
+    </div>
+    <div class="row-desc">
+      <h2>Where is that place?</h2>
+      <p>A continent covers more ground, a country as well. Higher the coverage, easier to guess.
+      How about narrowing down the territory? How much do you know about cultures?
+        A flag, a team, a bridge, a brand, a dish and millions of other details.
+        Tell us how much you know the world.</p>
+    </div>
+  </div>
+
+  <div style="text-align: center">
+    <button mat-raised-button color="primary" [routerLink]="['/game']">
+      Play now
+    </button>
+  </div>
+</main>

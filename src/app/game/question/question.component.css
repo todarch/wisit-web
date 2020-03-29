@@ -1,0 +1,17 @@
+.question-card {
+  margin: auto;
+  max-width: 750px;
+}
+
+.mat-card-content {
+  margin-bottom: 0;
+}
+
+.question-choices {
+  text-align: center;
+  padding: 0;
+}
+
+.choice-button {
+  min-width: 200px;
+}
