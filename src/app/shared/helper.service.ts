@@ -11,14 +11,13 @@ import {environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class HelperService extends AbstractService {
-  apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {
     super();
   }
 
   appHealth(): Observable<AppHealth | ErrorResponse> {
-    return this.http.get<AppHealth>(`${this.apiUrl}/actuator/health`)
+    return this.http.get<AppHealth>(`${this.apiUrl()}/actuator/health`)
       .pipe(
         catchError( err => this.handleError('Requesting app health failed', err))
       );

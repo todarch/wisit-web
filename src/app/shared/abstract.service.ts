@@ -7,6 +7,10 @@ export class AbstractService {
   base = environment.apiUrl;
   resource = '';
 
+  apiUrl() {
+    return this.base;
+  }
+
   get url() {
     return this.base + this.resource;
   }
