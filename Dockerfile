@@ -28,8 +28,8 @@ COPY . /app
 # RUN ng test --watch=false
 # RUN ng e2e --port 4202
 
-# generate build
-RUN ng build --output-path=dist
+# generate build with enableProdMode()
+RUN ng build --output-path=dist --prod
 
 ############
 ### prod ###
