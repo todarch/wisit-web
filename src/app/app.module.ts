@@ -17,7 +17,6 @@ import {MaterialModule} from './material/material.module';
 import {GameModule} from './game/game.module';
 import { FooterComponent } from './footer/footer.component';
 import {HttpClientModule} from '@angular/common/http';
-import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     NavComponent,
     NotFoundComponent,
     WelcomeComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

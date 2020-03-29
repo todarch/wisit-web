@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { GameRoutingModule } from './game-routing.module';
-import { QuestionComponent } from './question/question.component';
+import {GameRoutingModule} from './game-routing.module';
+import {QuestionComponent} from './question/question.component';
 import {MaterialModule} from '../material/material.module';
 
 
