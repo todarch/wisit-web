@@ -62,7 +62,7 @@ export class QuestionComponent implements OnInit {
 
   getButtonIcon(choice: string) {
     if (!this.answered()) {
-      return '';
+      return 'crop_square';
     }
     const loweredGivenAnswer = this.givenAnswer.toLowerCase();
     const loweredChoice = choice.toLowerCase();
@@ -73,7 +73,7 @@ export class QuestionComponent implements OnInit {
     if (loweredGivenAnswer === loweredChoice) {
       return 'close';
     } else {
-      return '';
+      return 'crop_square';
     }
   }
 

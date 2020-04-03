@@ -7,11 +7,30 @@
   margin-bottom: 0;
 }
 
-.question-choices {
-  text-align: center;
-  padding: 0;
+.choice-button {
+  width: 50%;
+  text-align: left;
 }
 
-.choice-button {
-  min-width: 200px;
+.image-holder {
+  position: relative;
+}
+
+.next-arrow-icon {
+  position: absolute;
+  right: 15px;
+  transform: scale(3);
+  color: antiquewhite;
+}
+
+.at-the-top {
+  top: 20px;
+}
+
+.at-the-bottom {
+  bottom: 50px;
+}
+
+.next-arrow-icon:hover {
+  color: white;
 }

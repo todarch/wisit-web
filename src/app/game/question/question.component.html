@@ -4,44 +4,29 @@
 </div>
 <div *ngIf="questionLoaded">
   <mat-card class="question-card">
-    <mat-card-actions class="question-choices">
-      <button mat-button class="choice-button"
-              disabled="{{answered()}}"
-              (click)="onAnswer(choices[0])"
-              color="{{getButtonColor(choices[0])}}">
-        <mat-icon>{{getButtonIcon(choices[0])}}</mat-icon>
-        {{choices[0] | uppercase}}</button>
-      <button mat-button class="choice-button"
-              disabled="{{answered()}}"
-              (click)="onAnswer(choices[1])"
-              color="{{getButtonColor(choices[1])}}">
-        <mat-icon>{{getButtonIcon(choices[1])}}</mat-icon>
-        {{choices[1] | uppercase}}</button>
-      <button mat-button class="choice-button" (click)="next()" disabled="{{!answered()}}">NEXT</button>
-    </mat-card-actions>
-    <img mat-card-image
-         style="max-height: 520px"
-         src="{{simpleQuestion.picUrl}}"
-         alt="Photo of a Shiba Inu">
+    <div class="image-holder">
+      <img mat-card-image
+           style="max-height: 520px"
+           src="{{simpleQuestion.picUrl}}"
+           alt="Photo of a Shiba Inu">
+      <ng-container *ngIf="answered()">
+        <mat-icon matTooltip="Next" class="next-arrow-icon at-the-top" (click)="next()">navigate_next</mat-icon>
+        <mat-icon matTooltip="Next" class="next-arrow-icon at-the-bottom" (click)="next()">navigate_next</mat-icon>
+      </ng-container>
+    </div>
     <mat-card-content>
-      <div *ngIf="showInfo">
-        <p>{{simpleQuestion.info}}</p>
-      </div>
+      <ng-container *ngFor="let choice of choices">
+        <button mat-button class="choice-button"
+                disabled="{{answered()}}"
+                (click)="onAnswer(choice)"
+                color="{{getButtonColor(choice)}}">
+          <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
+          {{choice | uppercase}}</button>
+      </ng-container>
+<!--      <button mat-button class="choice-button" (click)="toggleInfo()" disabled="{{!answered()}}">INFO</button>-->
+<!--      <div *ngIf="showInfo">-->
+<!--        <p>{{simpleQuestion.info || 'No info available for this picture.'}}</p>-->
+<!--      </div>-->
     </mat-card-content>
-    <mat-card-actions class="question-choices">
-      <button mat-button class="choice-button"
-              disabled="{{answered()}}"
-              (click)="onAnswer(choices[2])"
-              color="{{getButtonColor(choices[2])}}">
-        <mat-icon>{{getButtonIcon(choices[2])}}</mat-icon>
-        {{choices[2] | uppercase}}</button>
-      <button mat-button class="choice-button"
-              disabled="{{answered()}}"
-              (click)="onAnswer(choices[3])"
-              color="{{getButtonColor(choices[3])}}">
-        <mat-icon>{{getButtonIcon(choices[3])}}</mat-icon>
-        {{choices[3] | uppercase}}</button>
-      <button mat-button class="choice-button" (click)="toggleInfo()" disabled="{{!answered()}}">INFO</button>
-    </mat-card-actions>
   </mat-card>
 </div>
