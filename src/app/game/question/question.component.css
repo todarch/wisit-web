@@ -17,20 +17,14 @@
 }
 
 .next-arrow-icon {
+  top: 43%;
   position: absolute;
   right: 15px;
   transform: scale(3);
   color: antiquewhite;
 }
 
-.at-the-top {
-  top: 20px;
-}
-
-.at-the-bottom {
-  bottom: 50px;
-}
-
 .next-arrow-icon:hover {
   color: white;
+  cursor:pointer;
 }
