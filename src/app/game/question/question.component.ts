@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {GameService, OnePicFourChoiceQuestion} from '../services/game.service';
+import {GameService, OnePicFourChoiceQuestion, UserQuestionAnswer} from '../services/game.service';
+import {ErrorResponse} from '../../shared/error-response';
 
 @Component({
   selector: 'app-question',
@@ -10,8 +11,11 @@ export class QuestionComponent implements OnInit {
   simpleQuestion: OnePicFourChoiceQuestion;
   choices: string[];
   givenAnswer: string;
+  correctAnswer: string;
   showInfo: boolean;
   questionLoaded = false;
+  answerQuestionLoading = false;
+  noMoreQuestions = false;
 
   constructor(private gameService: GameService) { }
 
@@ -25,7 +29,10 @@ export class QuestionComponent implements OnInit {
         this.onNewQuestion(question);
         this.questionLoaded = true;
       },
-      error => {
+      (error: ErrorResponse) => {
+        if (error.httpStatusCode === 404) {
+          this.noMoreQuestions = true;
+        }
         console.log(error);
         this.questionLoaded = true;
       }
@@ -36,11 +43,26 @@ export class QuestionComponent implements OnInit {
     this.simpleQuestion = question;
     this.choices = this.simpleQuestion.choices;
     this.givenAnswer = '';
+    this.correctAnswer = '';
     this.showInfo = false;
   }
 
   onAnswer(givenAnswer: string) {
-    this.givenAnswer = givenAnswer;
+    this.answerQuestionLoading = true;
+    this.gameService.answerQuestion({
+      userQuestionId: this.simpleQuestion.userQuestionId,
+      cityId: this.simpleQuestion.choiceCityIds[this.simpleQuestion.choices.indexOf(givenAnswer)]
+    }).subscribe(
+      (answer: UserQuestionAnswer) => {
+        this.correctAnswer = answer.correctCity.name;
+        this.givenAnswer = givenAnswer;
+        this.answerQuestionLoading = false;
+      },
+      (error: ErrorResponse) => {
+        console.log(error);
+        this.answerQuestionLoading = false;
+      }
+    );
   }
 
   getButtonColor(choice: string) {
@@ -49,7 +71,7 @@ export class QuestionComponent implements OnInit {
     }
     const loweredGivenAnswer = this.givenAnswer.toLowerCase();
     const loweredChoice = choice.toLowerCase();
-    const loweredAnswer = this.simpleQuestion.answer.toLowerCase();
+    const loweredAnswer = this.correctAnswer.toLowerCase();
     if (loweredChoice === loweredAnswer) {
       return 'primary';
     }
@@ -66,7 +88,7 @@ export class QuestionComponent implements OnInit {
     }
     const loweredGivenAnswer = this.givenAnswer.toLowerCase();
     const loweredChoice = choice.toLowerCase();
-    const loweredAnswer = this.simpleQuestion.answer.toLowerCase();
+    const loweredAnswer = this.correctAnswer.toLowerCase();
     if (loweredChoice === loweredAnswer) {
       return 'check';
     }

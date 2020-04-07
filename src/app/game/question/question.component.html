@@ -3,29 +3,40 @@
   </mat-progress-spinner>
 </div>
 <div *ngIf="questionLoaded">
-  <mat-card class="question-card">
-    <div class="image-holder">
-      <img mat-card-image
-           style="max-height: 520px"
-           src="{{simpleQuestion.picUrl}}"
-           alt="Photo of a Shiba Inu">
-      <ng-container *ngIf="answered()">
-        <mat-icon matTooltip="Next" class="next-arrow-icon" (click)="next()">navigate_next</mat-icon>
+  <ng-container *ngIf="noMoreQuestions">
+    <p>No more questions for you, come back later.</p>
+  </ng-container>
+  <ng-container *ngIf="!noMoreQuestions">
+    <mat-card class="question-card">
+      <ng-container *ngIf="answerQuestionLoading">
+        <mat-progress-spinner [mode]="'indeterminate'">
+        </mat-progress-spinner>
       </ng-container>
-    </div>
-    <mat-card-content>
-      <ng-container *ngFor="let choice of choices">
-        <button mat-button class="choice-button"
-                disabled="{{answered()}}"
-                (click)="onAnswer(choice)"
-                color="{{getButtonColor(choice)}}">
-          <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
-          {{choice | uppercase}}</button>
+      <ng-container *ngIf="!answerQuestionLoading">
+        <div class="image-holder">
+          <img mat-card-image
+               style="max-height: 520px"
+               src="{{simpleQuestion.picUrl}}"
+               alt="Photo of a Shiba Inu">
+          <ng-container *ngIf="answered()">
+            <mat-icon matTooltip="Next" class="next-arrow-icon" (click)="next()">navigate_next</mat-icon>
+          </ng-container>
+        </div>
+        <mat-card-content>
+          <ng-container *ngFor="let choice of choices">
+            <button mat-button class="choice-button"
+                    disabled="{{answered()}}"
+                    (click)="onAnswer(choice)"
+                    color="{{getButtonColor(choice)}}">
+              <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
+              {{choice | uppercase}}</button>
+          </ng-container>
+          <!--      <button mat-button class="choice-button" (click)="toggleInfo()" disabled="{{!answered()}}">INFO</button>-->
+          <!--      <div *ngIf="showInfo">-->
+          <!--        <p>{{simpleQuestion.info || 'No info available for this picture.'}}</p>-->
+          <!--      </div>-->
+        </mat-card-content>
       </ng-container>
-<!--      <button mat-button class="choice-button" (click)="toggleInfo()" disabled="{{!answered()}}">INFO</button>-->
-<!--      <div *ngIf="showInfo">-->
-<!--        <p>{{simpleQuestion.info || 'No info available for this picture.'}}</p>-->
-<!--      </div>-->
-    </mat-card-content>
-  </mat-card>
+    </mat-card>
+  </ng-container>
 </div>

@@ -1,6 +1,6 @@
 export class ErrorResponse {
   errorNumber: number;
-  httpStatusCode: string;
+  httpStatusCode: number;
   message: string;
   friendlyMessage: string;
 }

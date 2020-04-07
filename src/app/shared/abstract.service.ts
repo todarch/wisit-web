@@ -26,7 +26,7 @@ export class AbstractService {
     this.log(`${operation} failed: ${error.message}`);
     const errorResponse = new ErrorResponse();
     errorResponse.errorNumber = -1;
-    errorResponse.httpStatusCode = status;
+    errorResponse.httpStatusCode = error.status;
     errorResponse.message = error.statusText;
     errorResponse.friendlyMessage = 'An error occurred retrieving data.';
     return throwError(errorResponse);
