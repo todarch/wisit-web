@@ -24,6 +24,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
   ],
   exports: [
     FlexLayoutModule,
+    MatAutocompleteModule,
     MatInputModule,
     MatButtonModule,
     MatSelectModule,

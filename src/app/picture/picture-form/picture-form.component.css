@@ -1,0 +1,16 @@
+.mat-form-field {
+  width: 50%;
+  min-width: 300px;
+  margin-top: 5px;
+}
+
+.mat-raised-button {
+  min-width: 50px;
+  width: 20%;
+}
+
+.picture-review-card {
+  margin: 10px auto auto;
+  max-width: 750px;
+  max-height: 520px;
+}

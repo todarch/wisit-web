@@ -1,0 +1,46 @@
+<form [formGroup]="pictureForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{pageHeader}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Picture url</mat-label>
+            <input matInput formControlName="picUrl" required>
+            <mat-error *ngIf="pictureForm.controls['picUrl'].hasError('required')">Please enter a valid picture url</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field>
+            <mat-label>Select the location of picture</mat-label>
+            <mat-select formControlName="cityId" required>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let city of cities" [value]="city.id">
+                {{city.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="pictureForm.controls['cityId'].hasError('required')">Please choose an city</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="pictureForm.invalid">
+        {{buttonText}}</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+<ng-container *ngIf="pictureForm.get('picUrl').value">
+  <div class="picture-review-card">
+      <h2>Picture Review</h2>
+      <img mat-card-image
+           src="{{pictureForm.get('picUrl').value}}"
+           alt="picture of a location">
+  </div>
+</ng-container>

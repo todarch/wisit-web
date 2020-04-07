@@ -17,6 +17,8 @@ import {MaterialModule} from './material/material.module';
 import {GameModule} from './game/game.module';
 import { FooterComponent } from './footer/footer.component';
 import {HttpClientModule} from '@angular/common/http';
+import {PictureModule} from './picture/picture.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,9 +31,11 @@ import {HttpClientModule} from '@angular/common/http';
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
     GameModule,
     BrowserAnimationsModule,
     MaterialModule,
+    PictureModule,
     AppRoutingModule // keep at the bottom
   ],
   providers: [],

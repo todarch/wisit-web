@@ -23,12 +23,14 @@ export class AbstractService {
    */
   protected handleError(operation = 'operation',
                         error: HttpErrorResponse): Observable<ErrorResponse> {
+    const apiError = error.error;
     this.log(`${operation} failed: ${error.message}`);
+    this.log(`api error: ${JSON.stringify(apiError)}`);
     const errorResponse = new ErrorResponse();
     errorResponse.errorNumber = -1;
     errorResponse.httpStatusCode = error.status;
     errorResponse.message = error.statusText;
-    errorResponse.friendlyMessage = 'An error occurred retrieving data.';
+    errorResponse.friendlyMessage = apiError.message;
     return throwError(errorResponse);
     // return (error: any): Observable<T> => {
     //
