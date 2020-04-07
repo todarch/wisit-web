@@ -1,18 +1,13 @@
-<div *ngIf="!questionLoaded">
-  <mat-progress-spinner [mode]="'indeterminate'">
-  </mat-progress-spinner>
-</div>
-<div *ngIf="questionLoaded">
   <ng-container *ngIf="noMoreQuestions">
     <p>No more questions for you, come back later.</p>
   </ng-container>
   <ng-container *ngIf="!noMoreQuestions">
-    <mat-card class="question-card">
-      <ng-container *ngIf="answerQuestionLoading">
-        <mat-progress-spinner [mode]="'indeterminate'">
-        </mat-progress-spinner>
-      </ng-container>
-      <ng-container *ngIf="!answerQuestionLoading">
+    <mat-card class="question-card" #questionCard>
+<!--      <ng-container *ngIf="loading">-->
+<!--        <mat-progress-spinner [mode]="'indeterminate'">-->
+<!--        </mat-progress-spinner>-->
+<!--        <span>{{loadingText}}</span>-->
+<!--      </ng-container>-->
         <div class="image-holder">
           <img mat-card-image
                style="max-height: 520px"
@@ -36,7 +31,5 @@
           <!--        <p>{{simpleQuestion.info || 'No info available for this picture.'}}</p>-->
           <!--      </div>-->
         </mat-card-content>
-      </ng-container>
     </mat-card>
   </ng-container>
-</div>

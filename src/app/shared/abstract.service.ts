@@ -30,7 +30,7 @@ export class AbstractService {
     errorResponse.errorNumber = -1;
     errorResponse.httpStatusCode = error.status;
     errorResponse.message = error.statusText;
-    errorResponse.friendlyMessage = apiError.message;
+    errorResponse.friendlyMessage = apiError ? apiError.message : 'Something unexpected happen.';
     return throwError(errorResponse);
     // return (error: any): Observable<T> => {
     //

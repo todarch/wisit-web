@@ -25,6 +25,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatSnackBarModule,
     MatTabsModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressBarModule
   ]
 })
 export class MaterialModule { }
