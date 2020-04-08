@@ -1,0 +1,30 @@
+.question-card {
+  margin: auto;
+  max-width: 750px;
+}
+
+.mat-card-content {
+  margin-bottom: 0;
+}
+
+.choice-button {
+  width: 50%;
+  text-align: left;
+}
+
+.image-holder {
+  position: relative;
+}
+
+.next-arrow-icon {
+  top: 43%;
+  position: absolute;
+  right: 15px;
+  transform: scale(3);
+  color: antiquewhite;
+}
+
+.next-arrow-icon:hover {
+  color: white;
+  cursor:pointer;
+}
