@@ -4,12 +4,12 @@ import {AbstractService} from '../../shared/abstract.service';
 import {catchError} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {ErrorResponse} from '../../shared/error-response';
+import {LeaderBoardItem} from '../leaderboard/leaderboard.component';
 
 export interface OnePicFourChoiceQuestion {
   userQuestionId: string;
   picUrl: string;
-  choices: string[];
-  choiceCityIds: number[];
+  choices: City[];
   answer: string;
   info: string;
 }
@@ -52,5 +52,13 @@ export class GameService extends AbstractService {
       .pipe(
         catchError( err => this.handleError('answering next question failed', err))
       );
+  }
+
+  dailyLeaderboard() {
+    return this.http.get<LeaderBoardItem[]>(`${this.apiUrl()}/api/leaderboards/daily`)
+      .pipe(
+        catchError( err => this.handleError('requesting daily leaderboard failed', err))
+      );
+
   }
 }

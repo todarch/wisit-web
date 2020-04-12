@@ -24,6 +24,8 @@
         <mat-icon aria-hidden="false" aria-label="Create New Todo">local_airport</mat-icon>
         Wisit
       </button>
+      <button mat-button [routerLink]="['/game']">Play</button>
+      <button mat-button [routerLink]="['/leaderboard']">Leaderboard</button>
     </mat-toolbar>
     <div class="grid-container">
       <router-outlet></router-outlet>

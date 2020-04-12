@@ -4,10 +4,11 @@ import {CommonModule} from '@angular/common';
 import {GameRoutingModule} from './game-routing.module';
 import {QuestionComponent} from './question/question.component';
 import {MaterialModule} from '../material/material.module';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 
 
 @NgModule({
-  declarations: [QuestionComponent],
+  declarations: [QuestionComponent, LeaderboardComponent],
   imports: [
     CommonModule,
     GameRoutingModule,

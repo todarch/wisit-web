@@ -5,6 +5,9 @@ import {OverlayRef} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {LoaderComponent} from '../../shared/loader/loader.component';
 import {DynamicOverlayService} from '../../shared/services/dynamic-overlay.service';
+import {City} from '../../shared/model/city';
+import {UserProfile, UserService} from '../../user/services/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-question',
@@ -15,14 +18,13 @@ export class QuestionComponent implements OnInit, AfterViewInit {
   simpleQuestion: OnePicFourChoiceQuestion = {
     userQuestionId: '',
     picUrl: '',
-    choiceCityIds: [],
     choices: [],
     answer: '',
     info: '',
   };
-  choices: string[];
-  givenAnswer: string;
-  correctAnswer: string;
+  choices: City[];
+  givenAnswer: City;
+  correctAnswer: City;
   showInfo: boolean;
   noMoreQuestions = false;
 
@@ -31,6 +33,8 @@ export class QuestionComponent implements OnInit, AfterViewInit {
   private overlayRef: OverlayRef;
 
   constructor(private gameService: GameService,
+              private userService: UserService,
+              private router: Router,
               private dynamicOverlayService: DynamicOverlayService) { }
 
   ngOnInit(): void {
@@ -39,6 +43,7 @@ export class QuestionComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     console.log('on after view init', this.card);
+    this.checkUsername();
     this.newQuestion();
   }
 
@@ -62,19 +67,19 @@ export class QuestionComponent implements OnInit, AfterViewInit {
   onNewQuestion(question: OnePicFourChoiceQuestion) {
     this.simpleQuestion = question;
     this.choices = this.simpleQuestion.choices;
-    this.givenAnswer = '';
-    this.correctAnswer = '';
+    this.givenAnswer = null;
+    this.correctAnswer = null;
     this.showInfo = false;
   }
 
-  onAnswer(givenAnswer: string) {
+  onAnswer(givenAnswer: City) {
     this.showOverlay();
     this.gameService.answerQuestion({
       userQuestionId: this.simpleQuestion.userQuestionId,
-      cityId: this.simpleQuestion.choiceCityIds[this.simpleQuestion.choices.indexOf(givenAnswer)]
+      cityId: givenAnswer.id
     }).subscribe(
       (answer: UserQuestionAnswer) => {
-        this.correctAnswer = answer.correctCity.name;
+        this.correctAnswer = answer.correctCity;
         this.givenAnswer = givenAnswer;
         this.closeOverlay();
       },
@@ -85,13 +90,13 @@ export class QuestionComponent implements OnInit, AfterViewInit {
     );
   }
 
-  getButtonColor(choice: string) {
+  getButtonColor(choice: City) {
     if (!this.answered()) {
       return '';
     }
-    const loweredGivenAnswer = this.givenAnswer.toLowerCase();
-    const loweredChoice = choice.toLowerCase();
-    const loweredAnswer = this.correctAnswer.toLowerCase();
+    const loweredGivenAnswer = this.givenAnswer.name.toLowerCase();
+    const loweredChoice = choice.name.toLowerCase();
+    const loweredAnswer = this.correctAnswer.name.toLowerCase();
     if (loweredChoice === loweredAnswer) {
       return 'primary';
     }
@@ -102,13 +107,13 @@ export class QuestionComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getButtonIcon(choice: string) {
+  getButtonIcon(choice: City) {
     if (!this.answered()) {
       return 'crop_square';
     }
-    const loweredGivenAnswer = this.givenAnswer.toLowerCase();
-    const loweredChoice = choice.toLowerCase();
-    const loweredAnswer = this.correctAnswer.toLowerCase();
+    const loweredGivenAnswer = this.givenAnswer.name.toLowerCase();
+    const loweredChoice = choice.name.toLowerCase();
+    const loweredAnswer = this.correctAnswer.name.toLowerCase();
     if (loweredChoice === loweredAnswer) {
       return 'check';
     }
@@ -142,5 +147,14 @@ export class QuestionComponent implements OnInit, AfterViewInit {
 
   closeOverlay() {
     this.overlayRef.detach();
+  }
+
+  private checkUsername() {
+    this.userService.profile()
+      .subscribe((userProfile: UserProfile) => {
+        },
+        (error => {
+          this.router.navigate(['users/pick-a-username']);
+        }));
   }
 }

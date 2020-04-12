@@ -1,0 +1,29 @@
+<form [formGroup]="formGroup" novalidate (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Picked a username</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput #username formControlName="username"
+                   oninput="this.value = this.value.toLowerCase().trim()"
+                   pattern="^[a-z0-9]{6,100}$" maxlength="100"  minlength="6" required>
+            <mat-hint align="start"><strong>At least 6 lowercase characters or digits</strong> </mat-hint>
+            <mat-hint align="end">{{username.value.length}} / 100</mat-hint>
+            <mat-error *ngIf="formGroup.controls['username'].hasError('required')">Please enter a username</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="formGroup.invalid">
+        Send</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

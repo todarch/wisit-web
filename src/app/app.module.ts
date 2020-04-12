@@ -14,6 +14,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {PictureModule} from './picture/picture.module';
 import {FormsModule} from '@angular/forms';
 import {LoaderComponent} from './shared/loader/loader.component';
+import {UserModule} from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {LoaderComponent} from './shared/loader/loader.component';
     BrowserAnimationsModule,
     MaterialModule,
     PictureModule,
+    UserModule,
     AppRoutingModule // keep at the bottom
   ],
   providers: [],

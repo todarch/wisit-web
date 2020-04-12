@@ -6,3 +6,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .grid-container {
   margin: 20px;
 }
+
+.full-width-table {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}

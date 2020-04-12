@@ -24,7 +24,7 @@
                     (click)="onAnswer(choice)"
                     color="{{getButtonColor(choice)}}">
               <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
-              {{choice | uppercase}}</button>
+              {{choice.name | uppercase}}</button>
           </ng-container>
           <!--      <button mat-button class="choice-button" (click)="toggleInfo()" disabled="{{!answered()}}">INFO</button>-->
           <!--      <div *ngIf="showInfo">-->
