@@ -2,17 +2,13 @@
   <div class="image-holder">
     <img mat-card-image
          style="max-height: 520px"
-         src="{{simpleQuestion.picUrl}}"
+         src="{{picUrl}}"
          alt="picture of a location">
-    <ng-container *ngIf="answered()">
       <mat-icon matTooltip="Go to homepage" class="next-arrow-icon" routerLink="/">navigate_next</mat-icon>
-    </ng-container>
   </div>
   <mat-card-content>
-    <ng-container *ngFor="let choice of simpleQuestion.choices">
-      <button mat-button class="choice-button"
-              disabled="{{answered()}}"
-              (click)="onAnswer(choice)">
+    <ng-container *ngFor="let choice of choices">
+      <button mat-button class="choice-button" disabled="true">
         <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
         {{choice | uppercase}}</button>
     </ng-container>
