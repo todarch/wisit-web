@@ -10,7 +10,6 @@ export interface OnePicFourChoiceQuestion {
   userQuestionId: string;
   picUrl: string;
   choices: City[];
-  answer: string;
   info: string;
 }
 

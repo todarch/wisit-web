@@ -18,7 +18,7 @@
           </ng-container>
         </div>
         <mat-card-content>
-          <ng-container *ngFor="let choice of choices">
+          <ng-container *ngFor="let choice of simpleQuestion.choices">
             <button mat-button class="choice-button"
                     disabled="{{answered()}}"
                     (click)="onAnswer(choice)"

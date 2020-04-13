@@ -15,14 +15,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./question.component.css']
 })
 export class QuestionComponent implements OnInit, AfterViewInit {
-  simpleQuestion: OnePicFourChoiceQuestion = {
-    userQuestionId: '',
-    picUrl: '',
-    choices: [],
-    answer: '',
-    info: '',
-  };
-  choices: City[];
+  simpleQuestion = this.placeHolderQuestion();
   givenAnswer: City;
   correctAnswer: City;
   showInfo: boolean;
@@ -38,11 +31,11 @@ export class QuestionComponent implements OnInit, AfterViewInit {
               private dynamicOverlayService: DynamicOverlayService) { }
 
   ngOnInit(): void {
-    console.log('on after on init', this.card);
+    // console.log('on after on init', this.card);
   }
 
   ngAfterViewInit() {
-    console.log('on after view init', this.card);
+    // console.log('on after view init', this.card);
     this.checkUsername();
     this.newQuestion();
   }
@@ -66,7 +59,6 @@ export class QuestionComponent implements OnInit, AfterViewInit {
 
   onNewQuestion(question: OnePicFourChoiceQuestion) {
     this.simpleQuestion = question;
-    this.choices = this.simpleQuestion.choices;
     this.givenAnswer = null;
     this.correctAnswer = null;
     this.showInfo = false;
@@ -156,5 +148,27 @@ export class QuestionComponent implements OnInit, AfterViewInit {
         (error => {
           this.router.navigate(['users/pick-a-username']);
         }));
+  }
+
+  private placeHolderQuestion(): OnePicFourChoiceQuestion {
+    return  {
+      userQuestionId: '',
+      picUrl: '/assets/img/loading-placeholder.png',
+      choices: [
+        this.placeHolderCityOption(),
+        this.placeHolderCityOption(),
+        this.placeHolderCityOption(),
+        this.placeHolderCityOption()
+      ],
+      info: '',
+    };
+
+  }
+
+  private placeHolderCityOption(): City {
+    return {
+      id: 1,
+      name: 'Loading'
+    };
   }
 }
