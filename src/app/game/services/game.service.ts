@@ -55,10 +55,23 @@ export class GameService extends AbstractService {
   }
 
   dailyLeaderboard() {
-    return this.http.get<LeaderBoardItem[]>(`${this.apiUrl()}/api/leaderboards/daily`)
+    return this.http.get<LeaderBoardItem[]>(`${this.apiUrl()}/api/leaderboards?type=d`)
       .pipe(
         catchError( err => this.handleError('requesting daily leaderboard failed', err))
       );
+  }
 
+  weeklyLeaderboard() {
+    return this.http.get<LeaderBoardItem[]>(`${this.apiUrl()}/api/leaderboards?type=w`)
+      .pipe(
+        catchError( err => this.handleError('requesting weekly leaderboard failed', err))
+      );
+  }
+
+  monthlyLeaderboard() {
+    return this.http.get<LeaderBoardItem[]>(`${this.apiUrl()}/api/leaderboards?type=m`)
+      .pipe(
+        catchError( err => this.handleError('requesting monthly leaderboard failed', err))
+      );
   }
 }
