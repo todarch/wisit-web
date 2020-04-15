@@ -1,0 +1,25 @@
+<form [formGroup]="formGroup" novalidate>
+  <h1 mat-dialog-title>{{data.name}}</h1>
+  <div mat-dialog-content>
+    <!--  <p>Tell us what is wrong with this question, please.</p>-->
+    <mat-form-field>
+      <mat-label>Select a reason</mat-label>
+      <mat-select formControlName="reportingReasonId">
+        <mat-option *ngFor="let reportingReason of reportingReasons"
+                    [value]="reportingReason.id">
+          {{reportingReason.reason}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Tell us more</mat-label>
+      <textarea formControlName="detail" #detail
+                matInput placeholder="You might share more details..." maxlength="250"></textarea>
+      <mat-hint align="end">{{detail.value.length}} / 250</mat-hint>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="onSubmit()" [disabled]="formGroup.invalid">Send</button>
+  </div>
+</form>

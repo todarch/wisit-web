@@ -6,14 +6,17 @@ import {QuestionComponent} from './question/question.component';
 import {MaterialModule} from '../material/material.module';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { BoardComponent } from './board/board.component';
+import { ReportDialogComponent } from './question/report-dialog/report-dialog.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
-  declarations: [QuestionComponent, LeaderboardComponent, BoardComponent],
+  declarations: [QuestionComponent, LeaderboardComponent, BoardComponent, ReportDialogComponent],
   imports: [
     CommonModule,
     GameRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ]
 })
 export class GameModule { }

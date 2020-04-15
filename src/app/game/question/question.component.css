@@ -32,3 +32,12 @@
   color: white;
   cursor:pointer;
 }
+
+.question-actions {
+  text-align: right;
+  margin-top: 8px;
+}
+
+.question-action-button {
+  transform: scale(0.75);
+}

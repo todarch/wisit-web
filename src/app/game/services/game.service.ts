@@ -5,9 +5,11 @@ import {catchError} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {ErrorResponse} from '../../shared/error-response';
 import {LeaderBoardItem} from '../leaderboard/leaderboard.component';
+import {ReportingReason} from '../question/report-dialog/report-dialog.component';
 
 export interface OnePicFourChoiceQuestion {
   userQuestionId: string;
+  questionId: string;
   picUrl: string;
   choices: City[];
   info: string;
@@ -28,6 +30,12 @@ export interface UserQuestionAnswer {
   correctCity: City;
   givenCity: City;
   knew: boolean;
+}
+
+export interface ReportQuestionCmd {
+  questionId: string;
+  reportingReasonId: number;
+  detail: string;
 }
 
 @Injectable({
@@ -72,5 +80,20 @@ export class GameService extends AbstractService {
       .pipe(
         catchError( err => this.handleError('requesting monthly leaderboard failed', err))
       );
+  }
+
+  reportingReasons() {
+    return this.http.get<ReportingReason[]>(`${this.apiUrl()}/api/reportings/reasons`)
+      .pipe(
+        catchError( err => this.handleError('requesting reporting reasons failed', err))
+      );
+  }
+
+  reportQuestion(reportingQuestionCmd: ReportQuestionCmd) {
+    return this.http.post(`${this.apiUrl()}/api/reportings`, reportingQuestionCmd)
+      .pipe(
+        catchError( err => this.handleError('reporting question failed', err))
+      );
+
   }
 }

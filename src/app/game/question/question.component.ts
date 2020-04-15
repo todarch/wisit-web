@@ -8,6 +8,9 @@ import {DynamicOverlayService} from '../../shared/services/dynamic-overlay.servi
 import {City} from '../../shared/model/city';
 import {UserProfile, UserService} from '../../user/services/user.service';
 import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {ReportDialogComponent, ReportingReason} from './report-dialog/report-dialog.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-question',
@@ -28,6 +31,8 @@ export class QuestionComponent implements OnInit, AfterViewInit {
   constructor(private gameService: GameService,
               private userService: UserService,
               private router: Router,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
               private dynamicOverlayService: DynamicOverlayService) { }
 
   ngOnInit(): void {
@@ -153,6 +158,7 @@ export class QuestionComponent implements OnInit, AfterViewInit {
   private placeHolderQuestion(): OnePicFourChoiceQuestion {
     return  {
       userQuestionId: '',
+      questionId: '',
       picUrl: '/assets/img/loading-placeholder.png',
       choices: [
         this.placeHolderCityOption(),
@@ -170,5 +176,23 @@ export class QuestionComponent implements OnInit, AfterViewInit {
       id: 1,
       name: 'Loading'
     };
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '50%',
+      minWidth: '300px',
+      data: {
+        name: 'Report question',
+        questionId: this.simpleQuestion.questionId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.snackBar.open('Question was reported. Thank you.', '', { duration: 5000 });
+        this.newQuestion();
+      }
+    });
   }
 }

@@ -1,8 +1,8 @@
   <ng-container *ngIf="noMoreQuestions">
     <p>No more questions for you, come back later.</p>
   </ng-container>
-  <ng-container *ngIf="!noMoreQuestions">
-    <mat-card class="question-card" #questionCard>
+  <div *ngIf="!noMoreQuestions" class="question-card">
+    <mat-card #questionCard>
 <!--      <ng-container *ngIf="loading">-->
 <!--        <mat-progress-spinner [mode]="'indeterminate'">-->
 <!--        </mat-progress-spinner>-->
@@ -32,4 +32,11 @@
           <!--      </div>-->
         </mat-card-content>
     </mat-card>
-  </ng-container>
+    <div class="question-actions">
+      <button mat-button class="question-action-button"
+              (click)="openDialog()">
+        <mat-icon>flag</mat-icon>
+        Report</button>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
