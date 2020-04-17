@@ -5,7 +5,6 @@ import {AppHealth} from './app-health';
 import {catchError} from 'rxjs/operators';
 import {AbstractService} from './abstract.service';
 import {ErrorResponse} from './error-response';
-import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +19,13 @@ export class HelperService extends AbstractService {
     return this.http.get<AppHealth>(`${this.apiUrl()}/actuator/health`)
       .pipe(
         catchError( err => this.handleError('Requesting app health failed', err))
+      );
+  }
+
+  internalLinks(): Observable<string[] | ErrorResponse> {
+    return this.http.get<string[]>(`${this.apiUrl()}/dummy/internal-links`)
+      .pipe(
+        catchError( err => this.handleError('Requesting internal links failed', err))
       );
   }
 }

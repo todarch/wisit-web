@@ -26,6 +26,17 @@
       </button>
       <button mat-button [routerLink]="['/game']">Play</button>
       <button mat-button [routerLink]="['/leaderboard']">Leaderboard</button>
+      <ng-container *ngIf="internalLinks">
+        <mat-menu #appMenu="matMenu">
+          <ng-container *ngFor="let internalLink of internalLinks">
+            <button mat-menu-item [routerLink]="internalLink">{{internalLink}}</button>
+          </ng-container>
+        </mat-menu>
+
+        <button mat-icon-button [matMenuTriggerFor]="appMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </ng-container>
     </mat-toolbar>
     <div class="grid-container">
       <router-outlet></router-outlet>
