@@ -190,7 +190,7 @@ export class QuestionComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackBar.open('Question was reported. Thank you.', '', { duration: 5000 });
+        this.snackBar.open('The question is reported. Thank you.', 'OK', { horizontalPosition: 'left', duration: 5000 });
         this.newQuestion();
       }
     });

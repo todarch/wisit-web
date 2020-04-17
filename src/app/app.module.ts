@@ -15,6 +15,7 @@ import {PictureModule} from './picture/picture.module';
 import {FormsModule} from '@angular/forms';
 import {LoaderComponent} from './shared/loader/loader.component';
 import {UserModule} from './user/user.module';
+import {ReportingModule} from './reporting/reporting.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import {UserModule} from './user/user.module';
     MaterialModule,
     PictureModule,
     UserModule,
+    ReportingModule,
     AppRoutingModule // keep at the bottom
   ],
   providers: [],

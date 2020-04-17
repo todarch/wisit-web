@@ -1,0 +1,31 @@
+<ng-container *ngIf="loading">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-container>
+<ng-container *ngIf="hasReportedQuestions()">
+  <mat-accordion>
+    <ng-container *ngFor="let reportedQuestion of reportedQuestions">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          # {{reportedQuestion.id}} - {{reportedQuestion.reason}}
+        </mat-expansion-panel-header>
+
+        <ng-template matExpansionPanelContent>
+          <p>{{reportedQuestion.detail}}</p>
+          <img mat-card-image
+               style="max-height: 520px; max-width: 520px"
+               src="{{reportedQuestion.question.picUrl}}"
+               alt="{{reportedQuestion.question.picUrl}}">
+          <p>Choices: {{reportedQuestion.question.choices.join(" - ")}}</p>
+        </ng-template>
+
+        <mat-action-row>
+          <button (click)="resolve(reportedQuestion, true)" mat-button color="warn">KEEP INACTIVE</button>
+          <button (click)="resolve(reportedQuestion, false)" mat-button>ACTIVATE</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
+</ng-container>
+<ng-container *ngIf="!hasReportedQuestions()">
+  <p>Great! We do not have any reported questions now.</p>
+</ng-container>
