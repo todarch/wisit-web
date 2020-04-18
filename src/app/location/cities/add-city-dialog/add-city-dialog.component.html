@@ -1,0 +1,27 @@
+<form [formGroup]="formGroup" novalidate>
+  <h1 mat-dialog-title>Add New City</h1>
+  <div mat-dialog-content>
+    <!--  <p>Tell us what is wrong with this question, please.</p>-->
+    <mat-form-field>
+      <mat-label>Select a country</mat-label>
+      <mat-select formControlName="countryId">
+        <mat-option *ngFor="let country of countries"
+                    [value]="country.id">
+          {{country.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Enter city name</mat-label>
+      <input matInput #cityName formControlName="cityName"
+             maxlength="100"  minlength="3" required>
+      <mat-hint align="start"><strong>At least 3 characters</strong> </mat-hint>
+      <mat-hint align="end">{{cityName.value.length}} / 100</mat-hint>
+      <mat-error *ngIf="formGroup.controls['cityName'].hasError('required')">Please enter a city name</mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="onSubmit()" [disabled]="formGroup.invalid">Add</button>
+  </div>
+</form>

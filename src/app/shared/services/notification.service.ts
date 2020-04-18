@@ -18,4 +18,11 @@ export class NotificationService {
   somethingUnexpectedHappen() {
     this.onLeftBottomOk('Something unexpected happened. Try again later.');
   }
+
+  onLeftBottomError(errorMessage: string) {
+    this.snackBar.open(
+      errorMessage,
+      'OK',
+      { horizontalPosition: 'left', duration: 5000 });
+  }
 }

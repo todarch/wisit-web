@@ -1,0 +1,12 @@
+.mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+.decision-actions {
+  margin: auto;
+  align-content: center;
+}
+
+.decision-button {
+  width: 50%;
+}

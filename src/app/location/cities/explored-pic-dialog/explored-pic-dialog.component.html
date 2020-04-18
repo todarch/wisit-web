@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Explored Pictures({{data.exploredPicUrls.length + 1}})</h1>
+<ng-container *ngIf="loading">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-container>
+<div mat-dialog-content>
+  <p>Decide which picture you would like to keep.</p>
+
+  <img mat-card-image
+       style="max-height: 400px; width: 100%"
+       src="{{picUrlToDecide}}"
+       alt="{{picUrlToDecide}}">
+
+  <div class="decision-actions">
+    <button class="decision-button" mat-button (click)="keep()" color="primary">KEEP</button>
+    <button class="decision-button" mat-button (click)="throw()" color="warn">THROW</button>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

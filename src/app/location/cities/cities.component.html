@@ -1,0 +1,56 @@
+<ng-container *ngIf="loading">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-container>
+<button mat-raised-button (click)="addCity()"> Add City </button>
+<mat-form-field class="table-filter-input">
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. type a city name">
+</mat-form-field>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="full-width-table" matSort aria-label="Elements">
+    <!-- Id Column -->
+    <ng-container matColumnDef="cityName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+      <td mat-cell *matCellDef="let row">{{row.cityName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="countryName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Country</th>
+      <td mat-cell *matCellDef="let row">{{row.countryName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="numberOfPictures">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header># of Pics</th>
+      <td mat-cell *matCellDef="let row">{{row.numberOfPictures}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+      <td mat-cell *matCellDef="let row">
+        <div fxLayout="row" fxLayoutAlign="space-between center" >
+          <div>
+            <button mat-button matTooltip="Explore new places for {{row.cityName}}"
+                    (click)="explore(row)" class="action-button">
+              <mat-icon aria-hidden="false" aria-label="explore" class="action-button">explore</mat-icon>
+            </button>
+          </div>
+<!--          <div>-->
+<!--            <button mat-button routerLink="/location/cities/{{row.id}}" class="action-button">-->
+<!--              <mat-icon aria-hidden="false" aria-label="Show Details" class="action-button">more_vert</mat-icon>-->
+<!--            </button>-->
+<!--          </div>-->
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+    <mat-paginator #paginator
+                   [length]="dataSource?.data.length"
+                   [pageIndex]="0"
+                   [pageSize]="50"
+                   [pageSizeOptions]="[25, 50, 100, 250]">
+    </mat-paginator>
+</div>
