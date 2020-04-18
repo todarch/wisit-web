@@ -22,6 +22,11 @@ export interface AddCityCmd {
   cityName: string;
 }
 
+export interface City {
+  id: number;
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -43,6 +48,13 @@ export class LocationService extends AbstractService {
     return this.http.get<Country[]>(`${this.apiUrl()}/api/location/countries`)
       .pipe(
         catchError( err => this.handleError('Requesting countries failed', err))
+      );
+  }
+
+  cities(): Observable<City[] | ErrorResponse> {
+    return this.http.get<City[]>(`${this.apiUrl()}/api/location/cities`)
+      .pipe(
+        catchError( err => this.handleError('Requesting cities failed', err))
       );
   }
 

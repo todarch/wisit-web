@@ -15,9 +15,12 @@
         <div class="col">
           <mat-form-field>
             <mat-label>Select the location of picture</mat-label>
-            <mat-select formControlName="cityId" required>
-              <mat-option>--</mat-option>
-              <mat-option *ngFor="let city of cities" [value]="city.id">
+            <mat-select formControlName="cityId" required (openedChange)="myInput.focus()">
+              <mat-option>
+                <input class="myInput" #myInput matInput (keyup)="search($event.target.value)"
+                       autocomplete="off" placeholder="Search">
+              </mat-option>
+              <mat-option *ngFor="let city of filteredCities" [value]="city.id">
                 {{city.name}}
               </mat-option>
             </mat-select>
@@ -38,9 +41,9 @@
 
 <ng-container *ngIf="pictureForm.get('picUrl').value">
   <div class="picture-review-card">
-      <h2>Picture Review</h2>
+      <h2>Picture Preview</h2>
       <img mat-card-image
            src="{{pictureForm.get('picUrl').value}}"
-           alt="picture of a location">
+           alt="{{pictureForm.get('picUrl').value}}">
   </div>
 </ng-container>

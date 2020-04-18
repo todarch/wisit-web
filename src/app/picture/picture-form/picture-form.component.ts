@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ErrorResponse} from '../../shared/error-response';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
 import {Picture} from '../picture';
 import {PictureService} from '../service/picture.service';
-import {StaticDataService} from '../../shared/services/static-data.service';
-import {City} from '../../shared/model/city';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {City, LocationService} from '../../location/services/location.service';
+import {NotificationService} from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-picture-form',
@@ -19,13 +16,17 @@ export class PictureFormComponent implements OnInit {
   picture: Picture;
   pageHeader = 'Add a new picture';
   buttonText = 'Add Picture';
-  errorResponse: ErrorResponse;
   cities: City[];
+  filteredCities: City[];
 
   constructor(private formBuilder: FormBuilder,
-              private staticDataService: StaticDataService,
-              private snackBar: MatSnackBar,
+              private locationService: LocationService,
+              private notificationService: NotificationService,
               private pictureService: PictureService) {
+    this.initForm();
+  }
+
+  private initForm() {
     this.pictureForm = this.formBuilder.group({
       id: [''],
       picUrl: ['', Validators.required],
@@ -40,21 +41,31 @@ export class PictureFormComponent implements OnInit {
   onSubmit() {
     this.pictureService.create(this.pictureForm.value)
       .subscribe(emptyResponse => {
-        this.snackBar.open('Picture added successfully.', '', { duration: 5000 });
-      },
+          this.notificationService.onLeftBottomOk('Picture added successfully.');
+          this.initForm();
+        },
         (error: ErrorResponse) => {
-          this.snackBar.open(`Error: ${error.friendlyMessage}`, '',
-            { duration: 5000 });
+          this.notificationService.onLeftBottomError(error.friendlyMessage);
         });
   }
 
   private getCities() {
-    this.staticDataService.cities()
+    this.locationService.cities()
       .subscribe((cities: City[]) => {
           this.cities = cities;
+          this.filteredCities = cities;
         },
-        err => {
-          console.log('could not load cities', err);
+        (error: ErrorResponse) => {
+          this.notificationService.onLeftBottomError(error.friendlyMessage);
         });
+  }
+
+  search(enteredValue: string) {
+    this.filteredCities = this.filterCities(enteredValue);
+  }
+
+  filterCities(value: string) {
+    const filter = value.toLowerCase();
+    return this.cities.filter(city => city.name.toLowerCase().startsWith(filter));
   }
 }

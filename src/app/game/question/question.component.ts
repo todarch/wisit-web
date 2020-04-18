@@ -1,11 +1,10 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {GameService, OnePicFourChoiceQuestion, UserQuestionAnswer} from '../services/game.service';
+import {City, GameService, OnePicFourChoiceQuestion, UserQuestionAnswer} from '../services/game.service';
 import {ErrorResponse} from '../../shared/error-response';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {LoaderComponent} from '../../shared/loader/loader.component';
 import {DynamicOverlayService} from '../../shared/services/dynamic-overlay.service';
-import {City} from '../../shared/model/city';
 import {UserProfile, UserService} from '../../user/services/user.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
