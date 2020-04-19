@@ -1,8 +1,8 @@
 <ng-container *ngIf="loading">
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-container>
-<button mat-raised-button (click)="addCity()"> Add City </button>
-<button mat-raised-button routerLink="/pictures/new"> Add Picture </button>
+<button class="table-action-button" mat-raised-button (click)="addCity()"> Add City </button>
+<button class="table-action-button" mat-raised-button routerLink="/pictures/new"> Add Picture </button>
 <mat-form-field class="table-filter-input">
   <mat-label>Filter</mat-label>
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. type a city name">
