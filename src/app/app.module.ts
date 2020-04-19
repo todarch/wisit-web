@@ -17,6 +17,7 @@ import {LoaderComponent} from './shared/loader/loader.component';
 import {UserModule} from './user/user.module';
 import {ReportingModule} from './reporting/reporting.module';
 import {LocationModule} from './location/location.module';
+import {DatePipe} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,9 @@ import {LocationModule} from './location/location.module';
     LocationModule,
     AppRoutingModule // keep at the bottom
   ],
-  providers: [],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [AppComponent],
   entryComponents: [LoaderComponent]
 })

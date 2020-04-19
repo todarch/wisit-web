@@ -13,6 +13,7 @@ export interface OnePicFourChoiceQuestion {
   picUrl: string;
   choices: City[];
   info: string;
+  createdAt: string;
 }
 
 export interface AnswerUserQuestion {

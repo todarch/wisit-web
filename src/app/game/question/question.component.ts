@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {ReportDialogComponent, ReportingReason} from './report-dialog/report-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-question',
@@ -32,6 +33,7 @@ export class QuestionComponent implements OnInit, AfterViewInit {
               private router: Router,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
+              private datePipe: DatePipe,
               private dynamicOverlayService: DynamicOverlayService) { }
 
   ngOnInit(): void {
@@ -166,6 +168,7 @@ export class QuestionComponent implements OnInit, AfterViewInit {
         this.placeHolderCityOption()
       ],
       info: '',
+      createdAt: Date.now().toString()
     };
 
   }
@@ -193,5 +196,17 @@ export class QuestionComponent implements OnInit, AfterViewInit {
         this.newQuestion();
       }
     });
+  }
+
+  toHumanDate(createdAt: string) {
+    return this.datePipe.transform(Date.parse(createdAt), 'mediumDate');
+  }
+
+  like(simpleQuestion: OnePicFourChoiceQuestion) {
+
+  }
+
+  dislike(simpleQuestion: OnePicFourChoiceQuestion) {
+
   }
 }
