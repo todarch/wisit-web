@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {City, GameService, OnePicFourChoiceQuestion, UserQuestionAnswer} from '../services/game.service';
 import {ErrorResponse} from '../../shared/error-response';
 import {OverlayRef} from '@angular/cdk/overlay';
@@ -17,12 +17,15 @@ import {DatePipe} from '@angular/common';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })
-export class QuestionComponent implements OnInit, AfterViewInit {
+export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   simpleQuestion = this.placeHolderQuestion();
   givenAnswer: City;
   correctAnswer: City;
   showInfo: boolean;
   noMoreQuestions = false;
+  answeredInSeconds: number;
+
+  private answeringTimer;
 
   @ViewChild('questionCard', { static: false, read: ElementRef }) card: ElementRef;
 
@@ -40,6 +43,12 @@ export class QuestionComponent implements OnInit, AfterViewInit {
     // console.log('on after on init', this.card);
   }
 
+  ngOnDestroy() {
+    if (this.answeringTimer) {
+      clearInterval(this.answeringTimer);
+    }
+  }
+
   ngAfterViewInit() {
     // console.log('on after view init', this.card);
     this.checkUsername();
@@ -52,6 +61,7 @@ export class QuestionComponent implements OnInit, AfterViewInit {
       (question: OnePicFourChoiceQuestion) => {
         this.onNewQuestion(question);
         this.closeOverlay();
+        this.startTimer();
       },
       (error: ErrorResponse) => {
         if (error.httpStatusCode === 404) {
@@ -74,7 +84,8 @@ export class QuestionComponent implements OnInit, AfterViewInit {
     this.showOverlay();
     this.gameService.answerQuestion({
       userQuestionId: this.simpleQuestion.userQuestionId,
-      cityId: givenAnswer.id
+      cityId: givenAnswer.id,
+      answeredInSeconds: this.answeredInSeconds
     }).subscribe(
       (answer: UserQuestionAnswer) => {
         this.correctAnswer = answer.correctCity;
@@ -208,5 +219,18 @@ export class QuestionComponent implements OnInit, AfterViewInit {
 
   dislike(simpleQuestion: OnePicFourChoiceQuestion) {
 
+  }
+
+  startTimer() {
+    this.answeredInSeconds = 0;
+    this.answeringTimer = setInterval(() => {
+      // console.log(this.answeringTimer);
+      this.answeredInSeconds++;
+
+      if (this.answered()) {
+        clearInterval(this.answeringTimer);
+        // console.log('answered in ' + this.answeringTimer + ' seconds');
+      }
+    }, 1000);
   }
 }

@@ -19,6 +19,7 @@ export interface OnePicFourChoiceQuestion {
 export interface AnswerUserQuestion {
   userQuestionId: string;
   cityId: number;
+  answeredInSeconds: number;
 }
 
 export interface City {
