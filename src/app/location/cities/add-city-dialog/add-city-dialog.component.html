@@ -4,9 +4,12 @@
     <!--  <p>Tell us what is wrong with this question, please.</p>-->
     <mat-form-field>
       <mat-label>Select a country</mat-label>
-      <mat-select formControlName="countryId">
-        <mat-option *ngFor="let country of countries"
-                    [value]="country.id">
+      <mat-select formControlName="countryId" required (openedChange)="myInput.focus()">
+        <mat-option>
+          <input class="myInput" #myInput matInput (keyup)="search($event.target.value)"
+                 autocomplete="off" placeholder="Search">
+        </mat-option>
+          <mat-option *ngFor="let country of filteredCountries" [value]="country.id">
           {{country.name}}
         </mat-option>
       </mat-select>
