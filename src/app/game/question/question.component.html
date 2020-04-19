@@ -3,13 +3,9 @@
   </ng-container>
   <div *ngIf="!noMoreQuestions" class="question-card">
     <mat-card #questionCard>
-<!--      <ng-container *ngIf="loading">-->
-<!--        <mat-progress-spinner [mode]="'indeterminate'">-->
-<!--        </mat-progress-spinner>-->
-<!--        <span>{{loadingText}}</span>-->
-<!--      </ng-container>-->
         <div class="image-holder">
           <img mat-card-image
+               (load)="imageLoaded()"
                style="max-height: 520px"
                src="{{simpleQuestion.picUrl}}"
                alt="picture of a location">
@@ -26,10 +22,6 @@
               <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
               {{choice.name | uppercase}}</button>
           </ng-container>
-          <!--      <button mat-button class="choice-button" (click)="toggleInfo()" disabled="{{!answered()}}">INFO</button>-->
-          <!--      <div *ngIf="showInfo">-->
-          <!--        <p>{{simpleQuestion.info || 'No info available for this picture.'}}</p>-->
-          <!--      </div>-->
         </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutAlign="space-between center" >
@@ -45,9 +37,14 @@
         <button matTooltip="I dislike this" mat-button class="question-action-button"
                 (click)="dislike(simpleQuestion)">
           <mat-icon>thumb_down</mat-icon> 5</button>
-        <button mat-button class="question-action-button"
-                (click)="openDialog()">
-          <mat-icon>flag</mat-icon>REPORT</button>
+        <mat-menu #appMenu="matMenu">
+          <button mat-button (click)="openDialog()">
+            <mat-icon>flag</mat-icon>Report</button>
+        </mat-menu>
+
+        <button mat-icon-button [matMenuTriggerFor]="appMenu">
+          <mat-icon>more_horiz</mat-icon>
+        </button>
       </div>
     </div>
     <mat-divider></mat-divider>

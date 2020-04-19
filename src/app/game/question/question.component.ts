@@ -55,13 +55,16 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.newQuestion();
   }
 
+  imageLoaded() {
+    this.closeOverlay();
+    this.startTimer();
+  }
+
   private newQuestion() {
     this.showOverlay();
     this.gameService.nextQuestion().subscribe(
       (question: OnePicFourChoiceQuestion) => {
         this.onNewQuestion(question);
-        this.closeOverlay();
-        this.startTimer();
       },
       (error: ErrorResponse) => {
         if (error.httpStatusCode === 404) {

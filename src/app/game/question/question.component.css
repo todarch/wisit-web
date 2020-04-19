@@ -5,6 +5,7 @@
 .question-card {
   margin: auto;
   max-width: 750px;
+  min-height: 800px;
 }
 
 .mat-card-content {
@@ -34,8 +35,6 @@
 }
 
 .question-actions {
-  text-align: right;
-  margin-top: 8px;
 }
 
 .question-action-button {
