@@ -1,11 +1,13 @@
-.mat-progress-spinner {
-  margin: auto;
-}
-
 .question-card {
   margin: auto;
+  width: 100%;
   max-width: 750px;
   min-height: 800px;
+}
+
+.question-img {
+  height: 100%;
+  max-height: 520px;
 }
 
 .mat-card-content {

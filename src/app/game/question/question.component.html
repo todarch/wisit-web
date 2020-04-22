@@ -5,8 +5,8 @@
     <mat-card #questionCard>
         <div class="image-holder">
           <img mat-card-image
+               class="question-img"
                (load)="imageLoaded()"
-               style="max-height: 520px"
                src="{{simpleQuestion.picUrl}}"
                alt="picture of a location">
           <ng-container *ngIf="answered()">
