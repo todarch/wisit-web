@@ -14,6 +14,7 @@ export interface OnePicFourChoiceQuestion {
   choices: City[];
   info: string;
   createdAt: string;
+  answeredCount: number;
 }
 
 export interface AnswerUserQuestion {

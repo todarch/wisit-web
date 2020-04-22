@@ -182,7 +182,8 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         this.placeHolderCityOption()
       ],
       info: '',
-      createdAt: Date.now().toString()
+      createdAt: Date.now().toString(),
+      answeredCount: 0
     };
 
   }
