@@ -23,8 +23,7 @@ export class UsernameComponent implements OnInit {
     this.formGroup = this.formBuilder.group(
       {
         username: ['', [Validators.required]],
-      },
-      { updateOn: 'blur' }
+      }
     );
   }
 
