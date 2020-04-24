@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {DoBootstrap, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -18,6 +18,10 @@ import {UserModule} from './user/user.module';
 import {ReportingModule} from './reporting/reporting.module';
 import {LocationModule} from './location/location.module';
 import {DatePipe} from '@angular/common';
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import {environment} from '../environments/environment';
+
+const keycloakService = new KeycloakService();
 
 @NgModule({
   declarations: [
@@ -28,6 +32,7 @@ import {DatePipe} from '@angular/common';
     FooterComponent,
   ],
   imports: [
+    KeycloakAngularModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,
@@ -41,9 +46,29 @@ import {DatePipe} from '@angular/common';
     AppRoutingModule // keep at the bottom
   ],
   providers: [
-    DatePipe
+    DatePipe,
+    {
+      provide: KeycloakService,
+      useValue: keycloakService
+    }
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [LoaderComponent]
+  entryComponents: [AppComponent, LoaderComponent]
 })
-export class AppModule { }
+export class AppModule implements DoBootstrap {
+  async ngDoBootstrap(app) {
+    const { keycloakConfig } = environment;
+
+    try {
+      await keycloakService.init({
+        config: keycloakConfig,
+        initOptions: {
+          onLoad: 'check-sso', // do not require logged in, but check if logged in
+          checkLoginIframe: true
+        }
+      });
+      app.bootstrap(AppComponent);
+    } catch (error) {
+      console.error('Keycloak init failed', error);
+    }
+  }
+}

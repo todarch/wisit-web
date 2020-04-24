@@ -5,10 +5,10 @@ import {OverlayRef} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {LoaderComponent} from '../../shared/loader/loader.component';
 import {DynamicOverlayService} from '../../shared/services/dynamic-overlay.service';
-import {UserProfile, UserService} from '../../user/services/user.service';
+import {UserService} from '../../user/services/user.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {ReportDialogComponent, ReportingReason} from './report-dialog/report-dialog.component';
+import {ReportDialogComponent} from './report-dialog/report-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DatePipe} from '@angular/common';
 
@@ -51,7 +51,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     // console.log('on after view init', this.card);
-    this.checkUsername();
+    // this.checkUsername();
     this.newQuestion();
   }
 
@@ -159,15 +159,6 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closeOverlay() {
     this.overlayRef.detach();
-  }
-
-  private checkUsername() {
-    this.userService.profile()
-      .subscribe((userProfile: UserProfile) => {
-        },
-        (error => {
-          this.router.navigate(['users/pick-a-username']);
-        }));
   }
 
   private placeHolderQuestion(): OnePicFourChoiceQuestion {

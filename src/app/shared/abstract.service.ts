@@ -11,6 +11,10 @@ export class AbstractService {
     return this.base;
   }
 
+  apiProtected() {
+    return this.base + '/api/protected';
+  }
+
   get url() {
     return this.base + this.resource;
   }

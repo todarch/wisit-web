@@ -4,7 +4,7 @@ import {UsernameComponent} from './username/username.component';
 
 
 const routes: Routes = [
-  { path: 'users/pick-a-username', component: UsernameComponent },
+  // { path: 'users/pick-a-username', component: UsernameComponent },
 ];
 
 @NgModule({
