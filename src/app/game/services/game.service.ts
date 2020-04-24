@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AbstractService} from '../../shared/abstract.service';
 import {catchError} from 'rxjs/operators';
@@ -51,14 +51,14 @@ export class GameService extends AbstractService {
   }
 
   nextQuestion(): Observable<OnePicFourChoiceQuestion | ErrorResponse> {
-    return this.http.get<OnePicFourChoiceQuestion>(`${this.apiUrl()}/api/questions/next`)
+    return this.http.get<OnePicFourChoiceQuestion>(`${this.apiProtected()}/questions/next`)
       .pipe(
         catchError( err => this.handleError('requesting next question failed', err))
       );
   }
 
   answerQuestion(answerQuestion: AnswerUserQuestion): Observable<UserQuestionAnswer | ErrorResponse> {
-    return this.http.post<UserQuestionAnswer>(`${this.apiUrl()}/api/questions/answer`, answerQuestion)
+    return this.http.post<UserQuestionAnswer>(`${this.apiProtected()}/questions/answer`, answerQuestion)
       .pipe(
         catchError( err => this.handleError('answering next question failed', err))
       );

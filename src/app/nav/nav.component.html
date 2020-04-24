@@ -37,6 +37,21 @@
           <mat-icon>more_vert</mat-icon>
         </button>
       </ng-container>
+      <span class="example-spacer"></span>
+      <ng-container *ngIf="isGuest">
+        <a mat-button [routerLink]="['/login']">Log in</a>
+        <a mat-button color="accent" [routerLink]="['/sign-up']">Sign up</a>
+      </ng-container>
+      <ng-container *ngIf="!isGuest">
+        <button mat-button [matMenuTriggerFor]="menu">
+          Profile
+          <mat-icon aria-label="Profile options">arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Settings</button>
+          <button mat-menu-item (click)="doLogout()">Log out</button>
+        </mat-menu>
+      </ng-container>
     </mat-toolbar>
     <div class="grid-container">
       <router-outlet></router-outlet>
