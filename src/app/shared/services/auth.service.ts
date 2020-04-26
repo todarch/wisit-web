@@ -6,8 +6,8 @@ import {KeycloakService} from 'keycloak-angular';
   providedIn: 'root'
 })
 export class AuthService {
-  userDetails: KeycloakProfile;
-  guestUser;
+  private userDetails: KeycloakProfile;
+  private guestUser;
 
   constructor(private keycloakService: KeycloakService) { }
 
@@ -18,6 +18,10 @@ export class AuthService {
     } else {
       this.guestUser = true;
     }
+  }
+
+  username() {
+    return this.userDetails.username;
   }
 
   async doLogout() {
