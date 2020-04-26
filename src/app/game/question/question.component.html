@@ -1,31 +1,33 @@
-  <ng-container *ngIf="noMoreQuestions">
-    <p>No more questions for you, come back later.</p>
-  </ng-container>
-  <div *ngIf="!noMoreQuestions" class="question-card">
+<ng-container *ngIf="noMoreQuestions">
+  <p>No more questions for you, come back later.</p>
+</ng-container>
+
+<ng-container *ngIf="!noMoreQuestions">
+    <div class="question-card">
     <mat-card #questionCard>
-        <div class="image-holder">
-          <img mat-card-image
-               class="question-img"
-               (load)="imageLoaded()"
-               src="{{simpleQuestion.picUrl}}"
-               alt="picture of a location">
-          <ng-container *ngIf="answered()">
-            <mat-icon matTooltip="Next" class="next-arrow-icon" (click)="next()">navigate_next</mat-icon>
-          </ng-container>
-        </div>
-        <mat-card-content>
-          <ng-container *ngFor="let choice of simpleQuestion.choices">
-            <button mat-button class="choice-button"
-                    disabled="{{answered()}}"
-                    (click)="onAnswer(choice)"
-                    color="{{getButtonColor(choice)}}">
-              <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
-              {{choice.name | uppercase}}</button>
-          </ng-container>
-        </mat-card-content>
+      <div class="image-holder">
+        <img mat-card-image
+             class="question-img"
+             (load)="imageLoaded()"
+             src="{{simpleQuestion.picUrl}}"
+             alt="picture of a location">
+        <ng-container *ngIf="answered()">
+          <mat-icon matTooltip="Next" class="next-arrow-icon" (click)="next()">navigate_next</mat-icon>
+        </ng-container>
+      </div>
+      <mat-card-content>
+        <ng-container *ngFor="let choice of simpleQuestion.choices">
+          <button mat-button class="choice-button"
+                  disabled="{{answered()}}"
+                  (click)="onAnswer(choice)"
+                  color="{{getButtonColor(choice)}}">
+            <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
+            {{choice.name | uppercase}}</button>
+        </ng-container>
+      </mat-card-content>
     </mat-card>
     <div fxLayout="row" fxLayoutAlign="space-between center" >
-      <div>
+      <div matTooltip="Answered {{simpleQuestion.answeredCount}} times">
         {{simpleQuestion.answeredCount}} times
         •
         {{toHumanDate(simpleQuestion.createdAt)}}
@@ -33,10 +35,12 @@
       <div>
         <button matTooltip="I like this" mat-button class="question-action-button"
                 (click)="like(simpleQuestion)">
-          <mat-icon>thumb_up</mat-icon> 25</button>
+          <mat-icon color="{{questionReactionStats?.liked ? 'primary' : ''}}">
+            thumb_up</mat-icon> {{questionReactionStats?.likes}}</button>
         <button matTooltip="I dislike this" mat-button class="question-action-button"
                 (click)="dislike(simpleQuestion)">
-          <mat-icon>thumb_down</mat-icon> 5</button>
+          <mat-icon color="{{questionReactionStats?.disliked ? 'primary' : ''}}">
+          thumb_down</mat-icon> {{questionReactionStats?.dislikes}}</button>
         <mat-menu #appMenu="matMenu">
           <button mat-button (click)="openDialog()">
             <mat-icon>flag</mat-icon>Report</button>
@@ -49,3 +53,4 @@
     </div>
     <mat-divider></mat-divider>
   </div>
+</ng-container>

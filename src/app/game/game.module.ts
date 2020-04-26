@@ -8,10 +8,12 @@ import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { BoardComponent } from './board/board.component';
 import { ReportDialogComponent } from './question/report-dialog/report-dialog.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { PlaygroundComponent } from './playground/playground.component';
+import { UserInfoComponent } from './user-info/user-info.component';
 
 
 @NgModule({
-  declarations: [QuestionComponent, LeaderboardComponent, BoardComponent, ReportDialogComponent],
+  declarations: [QuestionComponent, LeaderboardComponent, BoardComponent, ReportDialogComponent, PlaygroundComponent, UserInfoComponent],
   imports: [
     CommonModule,
     GameRoutingModule,

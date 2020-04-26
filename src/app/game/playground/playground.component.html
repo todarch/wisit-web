@@ -1,0 +1,20 @@
+<div fxLayout="row wrap" fxLayoutGap="15px grid" fxLayoutAlign="space-evenly start">
+  <ng-container>
+    <app-user-info [userScores]="userScores"></app-user-info>
+  </ng-container>
+  <ng-container>
+    <app-question (questionAnswered)="onQuestionAnswered($event)"></app-question>
+  </ng-container>
+  <ng-container>
+    <mat-tab-group>
+      <mat-tab label="Info">
+        <ng-template matTabContent>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Comments">
+        <ng-template matTabContent>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </ng-container>
+</div>

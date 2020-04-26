@@ -1,0 +1,22 @@
+.user-info-card {
+  margin: auto;
+  width: 100%;
+  max-width: 250px;
+}
+
+.header-image {
+  background-image: url('https://img.favpng.com/3/13/9/trophy-icon-png-favpng-RJ9Py9JuiKUrEZ7zcGii1VZT5.jpg');
+  background-size: cover;
+}
+
+.score-circle {
+  margin: auto;
+  width: 30%;
+  height: 50px;
+  /*border-radius: 25px;*/
+  font-size: 15px;
+  color: #fff;
+  line-height: 25px;
+  text-align: center;
+  background: #3f51b5;
+}

@@ -41,6 +41,19 @@ export interface ReportQuestionCmd {
   detail: string;
 }
 
+export interface QuestionReactionStats {
+  likes: number;
+  dislikes: number;
+  liked: boolean;
+  disliked: boolean;
+}
+
+export interface UserScores {
+  daily: number;
+  weekly: number;
+  monthly: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -97,6 +110,48 @@ export class GameService extends AbstractService {
       .pipe(
         catchError( err => this.handleError('reporting question failed', err))
       );
+  }
 
+  like(questionId: string) {
+    return this.http.post(`${this.apiProtected()}/question-reactions/like/${questionId}`, null)
+      .pipe(
+        catchError( err => this.handleError('liking question failed', err))
+      );
+  }
+
+  dislike(questionId: string) {
+    return this.http.post(`${this.apiProtected()}/question-reactions/dislike/${questionId}`, null)
+      .pipe(
+        catchError( err => this.handleError('disliking question failed', err))
+      );
+  }
+
+
+  stats(questionId: string) {
+    return this.http.get<QuestionReactionStats>(`${this.apiProtected()}/question-reactions/stats/${questionId}`)
+      .pipe(
+        catchError( err => this.handleError('fetching stats failed', err))
+      );
+  }
+
+  userScores() {
+    return this.http.get<UserScores>(`${this.apiProtected()}/scores`)
+      .pipe(
+        catchError( err => this.handleError('fetching user scores failed', err))
+      );
+  }
+
+  nextUserQuestion() {
+    return this.http.get<OnePicFourChoiceQuestion>(`${this.apiProtected()}/user-questions/next`)
+      .pipe(
+        catchError( err => this.handleError('fetching next user question failed', err))
+      );
+  }
+
+  answerUserQuestion(answerQuestion: AnswerUserQuestion): Observable<UserQuestionAnswer | ErrorResponse> {
+    return this.http.post<UserQuestionAnswer>(`${this.apiProtected()}/user-questions/answer`, answerQuestion)
+      .pipe(
+        catchError( err => this.handleError('answering next question failed', err))
+      );
   }
 }
