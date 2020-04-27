@@ -10,6 +10,7 @@ import { ReportDialogComponent } from './question/report-dialog/report-dialog.co
 import {ReactiveFormsModule} from '@angular/forms';
 import { PlaygroundComponent } from './playground/playground.component';
 import { UserInfoComponent } from './user-info/user-info.component';
+import {SharedModule} from '../shared/shared.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { UserInfoComponent } from './user-info/user-info.component';
     CommonModule,
     GameRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class GameModule { }

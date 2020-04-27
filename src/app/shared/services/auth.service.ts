@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   username() {
-    return this.userDetails.username;
+    return this.userDetails ? this.userDetails.username : 'Foreigner';
   }
 
   async doLogout() {

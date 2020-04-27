@@ -6,19 +6,29 @@ import {Observable} from 'rxjs';
 import {ErrorResponse} from '../../shared/error-response';
 import {LeaderBoardItem} from '../leaderboard/leaderboard.component';
 import {ReportingReason} from '../question/report-dialog/report-dialog.component';
+import {AuthService} from '../../shared/services/auth.service';
 
-export interface OnePicFourChoiceQuestion {
-  userQuestionId: string;
+export interface SimpleQuestion {
   questionId: string;
   picUrl: string;
   choices: City[];
-  info: string;
   createdAt: string;
   answeredCount: number;
 }
 
+export interface SimpleUserQuestion {
+  userQuestionId: string;
+  preparedQuestion: SimpleQuestion;
+}
+
 export interface AnswerUserQuestion {
   userQuestionId: string;
+  cityId: number;
+  answeredInSeconds: number;
+}
+
+export interface AnswerQuestion {
+  questionId: string;
   cityId: number;
   answeredInSeconds: number;
 }
@@ -30,6 +40,11 @@ export interface City {
 
 export interface UserQuestionAnswer {
   userQuestionId: string;
+  questionAnswer: QuestionAnswer;
+}
+
+export interface QuestionAnswer {
+  questionId: string;
   correctCity: City;
   givenCity: City;
   knew: boolean;
@@ -59,21 +74,22 @@ export interface UserScores {
 })
 export class GameService extends AbstractService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private authService: AuthService) {
     super();
   }
 
-  nextQuestion(): Observable<OnePicFourChoiceQuestion | ErrorResponse> {
-    return this.http.get<OnePicFourChoiceQuestion>(`${this.apiProtected()}/questions/next`)
+  nextQuestion(): Observable<SimpleQuestion | ErrorResponse> {
+    return this.http.get<SimpleQuestion>(`${this.apiPublic()}/questions/random`)
       .pipe(
-        catchError( err => this.handleError('requesting next question failed', err))
+        catchError( err => this.handleError('requesting random question failed', err))
       );
   }
 
-  answerQuestion(answerQuestion: AnswerUserQuestion): Observable<UserQuestionAnswer | ErrorResponse> {
-    return this.http.post<UserQuestionAnswer>(`${this.apiProtected()}/questions/answer`, answerQuestion)
+  answerQuestion(answerQuestion: AnswerQuestion): Observable<QuestionAnswer | ErrorResponse> {
+    return this.http.post<QuestionAnswer>(`${this.apiPublic()}/questions/answer`, answerQuestion)
       .pipe(
-        catchError( err => this.handleError('answering next question failed', err))
+        catchError( err => this.handleError('answering rand question failed', err))
       );
   }
 
@@ -128,7 +144,8 @@ export class GameService extends AbstractService {
 
 
   stats(questionId: string) {
-    return this.http.get<QuestionReactionStats>(`${this.apiProtected()}/question-reactions/stats/${questionId}`)
+    const api = this.authService.isGuest() ? this.apiPublic() : this.apiProtected();
+    return this.http.get<QuestionReactionStats>(`${api}/question-reactions/stats/${questionId}`)
       .pipe(
         catchError( err => this.handleError('fetching stats failed', err))
       );
@@ -142,7 +159,7 @@ export class GameService extends AbstractService {
   }
 
   nextUserQuestion() {
-    return this.http.get<OnePicFourChoiceQuestion>(`${this.apiProtected()}/user-questions/next`)
+    return this.http.get<SimpleUserQuestion>(`${this.apiProtected()}/user-questions/next`)
       .pipe(
         catchError( err => this.handleError('fetching next user question failed', err))
       );

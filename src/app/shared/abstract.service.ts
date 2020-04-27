@@ -11,6 +11,10 @@ export class AbstractService {
     return this.base;
   }
 
+  apiPublic() {
+    return this.base + '/api';
+  }
+
   apiProtected() {
     return this.base + '/api/protected';
   }

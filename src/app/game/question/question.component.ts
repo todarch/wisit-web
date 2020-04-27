@@ -1,16 +1,24 @@
 import {AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {City, GameService, OnePicFourChoiceQuestion, QuestionReactionStats, UserQuestionAnswer} from '../services/game.service';
+import {
+  City,
+  GameService,
+  QuestionAnswer,
+  QuestionReactionStats,
+  SimpleQuestion,
+  SimpleUserQuestion,
+  UserQuestionAnswer
+} from '../services/game.service';
 import {ErrorResponse} from '../../shared/error-response';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {LoaderComponent} from '../../shared/loader/loader.component';
 import {DynamicOverlayService} from '../../shared/services/dynamic-overlay.service';
-import {UserService} from '../../user/services/user.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {ReportDialogComponent} from './report-dialog/report-dialog.component';
 import {DatePipe} from '@angular/common';
 import {NotificationService} from '../../shared/services/notification.service';
+import {AuthService} from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-question',
@@ -27,6 +35,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   answeredInSeconds: number;
   questionReactionStats = QuestionComponent.defaultStats();
 
+  private userQuestionId;
   private answeringTimer;
 
   @ViewChild('questionCard', { static: false, read: ElementRef }) card: ElementRef;
@@ -43,7 +52,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(private gameService: GameService,
-              private userService: UserService,
+              private authService: AuthService,
               private router: Router,
               private dialog: MatDialog,
               private notificationService: NotificationService,
@@ -62,7 +71,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     // console.log('on after view init', this.card);
-    this.newQuestion();
+    this.fetchNewQuestion();
   }
 
   imageLoaded() {
@@ -70,28 +79,54 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.startTimer();
   }
 
-  private newQuestion() {
-    this.showOverlay();
-    this.gameService.nextUserQuestion().subscribe(
-      (question: OnePicFourChoiceQuestion) => {
-        this.onNewQuestion(question);
-        this.retrieveStats(question);
-      },
-      (error: ErrorResponse) => {
-        if (error.httpStatusCode === 404) {
-          this.noMoreQuestions = true;
-        }
-        console.log(error);
-        this.closeOverlay();
-      }
-    );
+  private fetchNewQuestion() {
+    if (this.authService.isGuest()) {
+      this. newQuestion();
+    } else {
+      this.newUserQuestion();
+    }
   }
 
-  private retrieveStats(question: OnePicFourChoiceQuestion) {
-    if (!question.questionId) {
+  private newQuestion() {
+    this.showOverlay();
+    this.gameService.nextQuestion()
+      .subscribe((simpleQuestion: SimpleQuestion) => {
+          this.onNewQuestion(simpleQuestion);
+          // overlay is closed after image is loaded
+        },
+        (error: ErrorResponse) => {
+          if (error.httpStatusCode === 404) {
+            this.noMoreQuestions = true;
+          }
+          console.log(error);
+          this.closeOverlay();
+        }
+      );
+  }
+
+  private newUserQuestion() {
+    this.showOverlay();
+    this.gameService.nextUserQuestion()
+      .subscribe((simpleUserQuestion: SimpleUserQuestion) => {
+          this.userQuestionId = simpleUserQuestion.userQuestionId;
+          this.onNewQuestion(simpleUserQuestion.preparedQuestion);
+          // overlay is closed after image is loaded
+        },
+        (error: ErrorResponse) => {
+          if (error.httpStatusCode === 404) {
+            this.noMoreQuestions = true;
+          }
+          console.log(error);
+          this.closeOverlay();
+        }
+      );
+  }
+
+  private retrieveStats(questionId: string) {
+    if (!questionId) {
       return;
     }
-    this.gameService.stats(question.questionId).subscribe(
+    this.gameService.stats(questionId).subscribe(
       (stats: QuestionReactionStats) => {
         this.questionReactionStats = stats;
       },
@@ -101,23 +136,52 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  onNewQuestion(question: OnePicFourChoiceQuestion) {
+  onNewQuestion(question: SimpleQuestion) {
     this.simpleQuestion = question;
     this.givenAnswer = null;
     this.correctAnswer = null;
+    this.retrieveStats(question.questionId);
   }
 
   onAnswer(givenAnswer: City) {
+    if (this.authService.isGuest()) {
+      this.answerQuestion(givenAnswer);
+    } else {
+      this.answerUserQuestion(givenAnswer);
+    }
+  }
+
+  private answerUserQuestion(givenAnswer: City) {
     this.showOverlay();
     this.gameService.answerUserQuestion({
-      userQuestionId: this.simpleQuestion.userQuestionId,
+      userQuestionId: this.userQuestionId,
       cityId: givenAnswer.id,
       answeredInSeconds: this.answeredInSeconds
     }).subscribe(
       (answer: UserQuestionAnswer) => {
-        this.correctAnswer = answer.correctCity;
-        this.givenAnswer = givenAnswer;
+        this.correctAnswer = answer.questionAnswer.correctCity;
+        this.givenAnswer = answer.questionAnswer.givenCity;
         this.questionAnswered.emit();
+        this.closeOverlay();
+      },
+      (error: ErrorResponse) => {
+        console.log(error);
+        this.closeOverlay();
+      }
+    );
+  }
+
+  private answerQuestion(givenAnswer: City) {
+    this.showOverlay();
+    this.gameService.answerQuestion({
+      questionId: this.simpleQuestion.questionId,
+      cityId: givenAnswer.id,
+      answeredInSeconds: this.answeredInSeconds
+    }).subscribe(
+      (answer: QuestionAnswer) => {
+        this.correctAnswer = answer.correctCity;
+        this.givenAnswer = answer.givenCity;
+        // this.questionAnswered.emit(); will not update score for guest
         this.closeOverlay();
       },
       (error: ErrorResponse) => {
@@ -170,7 +234,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   next() {
-    this.newQuestion();
+    this.fetchNewQuestion();
     this.questionReactionStats = QuestionComponent.defaultStats();
   }
 
@@ -183,9 +247,8 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.overlayRef.detach();
   }
 
-  private placeHolderQuestion(): OnePicFourChoiceQuestion {
+  private placeHolderQuestion(): SimpleQuestion {
     return  {
-      userQuestionId: '',
       questionId: '',
       picUrl: '/assets/img/loading-placeholder.png',
       choices: [
@@ -194,7 +257,6 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         this.placeHolderCityOption(),
         this.placeHolderCityOption()
       ],
-      info: '',
       createdAt: Date.now().toString(),
       answeredCount: 0
     };
@@ -221,7 +283,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.notificationService.onLeftBottomOk('The question is reported. Thank you.');
-        this.newQuestion();
+        this.fetchNewQuestion();
       }
     });
   }
@@ -230,7 +292,10 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.datePipe.transform(Date.parse(createdAt), 'mediumDate');
   }
 
-  like(simpleQuestion: OnePicFourChoiceQuestion) {
+  like(simpleQuestion: SimpleQuestion) {
+    // TODO: show sign up pop up
+    if (this.authService.isGuest()) { return; }
+
     if (this.questionReactionStats.liked) {
       //TODO:
       console.log('already liked, NOP, todo: unlike');
@@ -250,7 +315,10 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         });
   }
 
-  dislike(simpleQuestion: OnePicFourChoiceQuestion) {
+  dislike(simpleQuestion: SimpleQuestion) {
+    // TODO: show sign up pop up
+    if (this.authService.isGuest()) { return; }
+
     if (this.questionReactionStats.disliked) {
       //TODO:
       console.log('already disliked, NOP, todo: remove dislike');

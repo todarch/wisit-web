@@ -1,12 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {LeaderboardComponent} from './leaderboard/leaderboard.component';
-import {AppAuthGuard} from '../app.authguard';
 import {PlaygroundComponent} from './playground/playground.component';
 
 
 const routes: Routes = [
-  { path: 'game', component: PlaygroundComponent, canActivate: [AppAuthGuard] },
+  { path: 'game', component: PlaygroundComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
 ];
 
