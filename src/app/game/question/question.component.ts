@@ -161,7 +161,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       (answer: UserQuestionAnswer) => {
         this.correctAnswer = answer.questionAnswer.correctCity;
         this.givenAnswer = answer.questionAnswer.givenCity;
-        this.questionAnswered.emit();
+        this.questionAnswered.emit(answer.questionAnswer.scoreDelta);
         this.closeOverlay();
       },
       (error: ErrorResponse) => {
@@ -181,7 +181,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       (answer: QuestionAnswer) => {
         this.correctAnswer = answer.correctCity;
         this.givenAnswer = answer.givenCity;
-        // this.questionAnswered.emit(); will not update score for guest
+        this.questionAnswered.emit(answer.scoreDelta);
         this.closeOverlay();
       },
       (error: ErrorResponse) => {

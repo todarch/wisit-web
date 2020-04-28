@@ -48,6 +48,7 @@ export interface QuestionAnswer {
   correctCity: City;
   givenCity: City;
   knew: boolean;
+  scoreDelta: number;
 }
 
 export interface ReportQuestionCmd {
@@ -67,6 +68,7 @@ export interface UserScores {
   daily: number;
   weekly: number;
   monthly: number;
+  scoreDelta: number;
 }
 
 @Injectable({

@@ -26,7 +26,8 @@ export class PlaygroundComponent implements OnInit {
       this.userScores = {
         daily: 0,
         weekly: 0,
-        monthly: 0
+        monthly: 0,
+        scoreDelta: 0
       };
       return;
     }
@@ -40,6 +41,12 @@ export class PlaygroundComponent implements OnInit {
   }
 
   onQuestionAnswered($event: any) {
-    this.fetchUserScores();
+    const scoreDelta = $event;
+    this.userScores = {
+      daily: this.userScores.daily + this.userScores.scoreDelta,
+      weekly: this.userScores.weekly + this.userScores.scoreDelta,
+      monthly: this.userScores.monthly + this.userScores.scoreDelta,
+      scoreDelta
+    };
   }
 }

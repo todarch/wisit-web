@@ -1,7 +1,7 @@
 <ng-container *ngIf="authService.isGuest()">
   <app-info-box message="{{guestMessage}}"></app-info-box>
 </ng-container>
-<div fxLayout="row wrap" fxLayoutGap="15px grid" fxLayoutAlign="space-evenly start">
+<div fxLayout="row wrap" fxLayoutGap="30px grid" fxLayoutAlign="space-evenly start">
   <ng-container>
     <app-user-info [userScores]="userScores"></app-user-info>
   </ng-container>

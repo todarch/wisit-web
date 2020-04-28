@@ -1,7 +1,6 @@
 .user-info-card {
   margin: auto;
   width: 100%;
-  max-width: 250px;
 }
 
 .header-image {
@@ -19,5 +18,16 @@
   line-height: 25px;
   text-align: center;
   background: #3f51b5;
+  padding: 8px;
+}
+
+sup {
+  color: chartreuse;
+  font-size: 60%;
+}
+
+sub {
+  color: tomato;
+  font-size: 60%;
 }
 
