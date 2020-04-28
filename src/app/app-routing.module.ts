@@ -10,7 +10,6 @@ const routes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: 'login', component: DummyComponent, canActivate: [AppAuthGuard] },
-  { path: 'sign-up', component: DummyComponent, canActivate: [AppAuthGuard] },
   { path: '**', component: NotFoundComponent }
 ];
 

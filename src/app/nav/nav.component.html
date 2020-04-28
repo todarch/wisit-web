@@ -21,7 +21,7 @@
 <!--        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>-->
 <!--      </button>-->
       <button mat-button [routerLink]="['/']">
-        <mat-icon aria-hidden="false" aria-label="Create New Todo">local_airport</mat-icon>
+        <mat-icon aria-hidden="false" aria-label="main-logo">local_airport</mat-icon>
         Wisit
       </button>
       <button mat-button [routerLink]="['/game']">Play</button>
@@ -39,8 +39,8 @@
       </ng-container>
       <span class="example-spacer"></span>
       <ng-container *ngIf="isGuest">
-        <a mat-button [routerLink]="['/login']">Log in</a>
-        <a mat-button color="accent" [routerLink]="['/sign-up']">Sign up</a>
+        <a mat-button color="warn" [routerLink]="['/login']">
+          <mat-icon aria-hidden="false">person</mat-icon>SIGN IN</a>
       </ng-container>
       <ng-container *ngIf="!isGuest">
         <button mat-button [matMenuTriggerFor]="menu">
