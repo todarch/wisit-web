@@ -1,9 +1,10 @@
 import {AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {
-  City,
+  Choice,
   GameService,
   QuestionAnswer,
   QuestionReactionStats,
+  QuestionType,
   SimpleQuestion,
   SimpleUserQuestion,
   UserQuestionAnswer
@@ -29,14 +30,15 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() questionAnswered = new EventEmitter();
 
   simpleQuestion = this.placeHolderQuestion();
-  givenAnswer: City;
-  correctAnswer: City;
+  givenAnswer: Choice;
+  correctAnswer: Choice;
   noMoreQuestions = false;
   answeredInSeconds: number;
   questionReactionStats = QuestionComponent.defaultStats();
 
   private userQuestionId;
   private answeringTimer;
+  private questionType: QuestionType = QuestionType.CITIES_AS_CHOICES;
 
   @ViewChild('questionCard', { static: false, read: ElementRef }) card: ElementRef;
 
@@ -143,7 +145,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.retrieveStats(question.questionId);
   }
 
-  onAnswer(givenAnswer: City) {
+  onAnswer(givenAnswer: Choice) {
     if (this.authService.isGuest()) {
       this.answerQuestion(givenAnswer);
     } else {
@@ -151,16 +153,20 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private answerUserQuestion(givenAnswer: City) {
+  private answerUserQuestion(givenAnswer: Choice) {
     this.showOverlay();
     this.gameService.answerUserQuestion({
       userQuestionId: this.userQuestionId,
-      cityId: givenAnswer.id,
-      answeredInSeconds: this.answeredInSeconds
+      answerQuestion: {
+        questionId: this.simpleQuestion.questionId,
+        cityId: givenAnswer.id,
+        answeredInSeconds: this.answeredInSeconds,
+        questionType: this.questionType
+      }
     }).subscribe(
       (answer: UserQuestionAnswer) => {
-        this.correctAnswer = answer.questionAnswer.correctCity;
-        this.givenAnswer = answer.questionAnswer.givenCity;
+        this.correctAnswer = answer.questionAnswer.correctChoice;
+        this.givenAnswer = answer.questionAnswer.givenChoice;
         this.questionAnswered.emit(answer.questionAnswer.scoreDelta);
         this.closeOverlay();
       },
@@ -171,16 +177,17 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  private answerQuestion(givenAnswer: City) {
+  private answerQuestion(givenAnswer: Choice) {
     this.showOverlay();
     this.gameService.answerQuestion({
       questionId: this.simpleQuestion.questionId,
       cityId: givenAnswer.id,
-      answeredInSeconds: this.answeredInSeconds
+      answeredInSeconds: this.answeredInSeconds,
+      questionType: this.questionType
     }).subscribe(
       (answer: QuestionAnswer) => {
-        this.correctAnswer = answer.correctCity;
-        this.givenAnswer = answer.givenCity;
+        this.correctAnswer = answer.correctChoice;
+        this.givenAnswer = answer.givenChoice;
         this.questionAnswered.emit(answer.scoreDelta);
         this.closeOverlay();
       },
@@ -191,34 +198,28 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  getButtonColor(choice: City) {
+  getButtonColor(choice: Choice) {
     if (!this.answered()) {
       return '';
     }
-    const loweredGivenAnswer = this.givenAnswer.name.toLowerCase();
-    const loweredChoice = choice.name.toLowerCase();
-    const loweredAnswer = this.correctAnswer.name.toLowerCase();
-    if (loweredChoice === loweredAnswer) {
+    if (choice.id === this.correctAnswer.id) {
       return 'primary';
     }
-    if (loweredGivenAnswer === loweredChoice) {
+    if (this.givenAnswer.id === choice.id) {
       return 'warn';
     } else {
       return '';
     }
   }
 
-  getButtonIcon(choice: City) {
+  getButtonIcon(choice: Choice) {
     if (!this.answered()) {
       return 'crop_square';
     }
-    const loweredGivenAnswer = this.givenAnswer.name.toLowerCase();
-    const loweredChoice = choice.name.toLowerCase();
-    const loweredAnswer = this.correctAnswer.name.toLowerCase();
-    if (loweredChoice === loweredAnswer) {
+    if (choice.id === this.correctAnswer.id) {
       return 'check';
     }
-    if (loweredGivenAnswer === loweredChoice) {
+    if (this.givenAnswer.id === choice.id) {
       return 'close';
     } else {
       return 'crop_square';
@@ -234,8 +235,18 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   next() {
+    this.questionType = this.pickOne();
     this.fetchNewQuestion();
     this.questionReactionStats = QuestionComponent.defaultStats();
+  }
+
+  private pickOne(): QuestionType {
+    switch (this.questionType) {
+      case QuestionType.CITIES_AS_CHOICES:
+        return  QuestionType.COUNTRIES_AS_CHOICES;
+      case QuestionType.COUNTRIES_AS_CHOICES:
+        return  QuestionType.CITIES_AS_CHOICES;
+    }
   }
 
   showOverlay() {
@@ -252,10 +263,10 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       questionId: '',
       picUrl: '/assets/img/loading-placeholder.png',
       choices: [
-        this.placeHolderCityOption(),
-        this.placeHolderCityOption(),
-        this.placeHolderCityOption(),
-        this.placeHolderCityOption()
+        this.placeHolderChoice(),
+        this.placeHolderChoice(),
+        this.placeHolderChoice(),
+        this.placeHolderChoice()
       ],
       createdAt: Date.now().toString(),
       answeredCount: 0
@@ -263,10 +274,11 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  private placeHolderCityOption(): City {
+  private placeHolderChoice(): Choice {
     return {
       id: 1,
-      name: 'Loading'
+      cityName: 'Loading',
+      countryName: 'Loading'
     };
   }
 
@@ -349,5 +361,14 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         // console.log('answered in ' + this.answeringTimer + ' seconds');
       }
     }, 1000);
+  }
+
+  toChoiceValue(choice: Choice): string {
+    switch (this.questionType) {
+      case QuestionType.CITIES_AS_CHOICES:
+        return choice.cityName;
+      case QuestionType.COUNTRIES_AS_CHOICES:
+        return choice.countryName;
+    }
   }
 }

@@ -11,7 +11,7 @@ import {AuthService} from '../../shared/services/auth.service';
 export interface SimpleQuestion {
   questionId: string;
   picUrl: string;
-  choices: City[];
+  choices: Choice[];
   createdAt: string;
   answeredCount: number;
 }
@@ -23,19 +23,30 @@ export interface SimpleUserQuestion {
 
 export interface AnswerUserQuestion {
   userQuestionId: string;
-  cityId: number;
-  answeredInSeconds: number;
+  answerQuestion: AnswerQuestion;
 }
 
 export interface AnswerQuestion {
   questionId: string;
   cityId: number;
   answeredInSeconds: number;
+  questionType: QuestionType;
 }
 
 export interface City {
   id: number;
   name: string;
+}
+
+export interface Choice {
+  id: number;
+  cityName: string;
+  countryName: string;
+}
+
+export enum QuestionType {
+  CITIES_AS_CHOICES,
+  COUNTRIES_AS_CHOICES
 }
 
 export interface UserQuestionAnswer {
@@ -45,8 +56,8 @@ export interface UserQuestionAnswer {
 
 export interface QuestionAnswer {
   questionId: string;
-  correctCity: City;
-  givenCity: City;
+  correctChoice: Choice;
+  givenChoice: Choice;
   knew: boolean;
   scoreDelta: number;
 }

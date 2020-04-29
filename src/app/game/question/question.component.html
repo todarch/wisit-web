@@ -22,7 +22,7 @@
                   (click)="onAnswer(choice)"
                   color="{{getButtonColor(choice)}}">
             <mat-icon>{{getButtonIcon(choice)}}</mat-icon>
-            {{choice.name | uppercase}}</button>
+            {{toChoiceValue(choice) | uppercase}}</button>
         </ng-container>
       </mat-card-content>
     </mat-card>
