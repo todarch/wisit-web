@@ -34,6 +34,7 @@ export class PlaygroundComponent implements OnInit {
     this.gameService.userScores()
       .subscribe((scores: UserScores) => {
           this.userScores = scores;
+          this.userScores.scoreDelta = 0;
         },
         (error => {
           console.log(error);
