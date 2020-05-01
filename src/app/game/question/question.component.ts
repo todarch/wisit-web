@@ -20,6 +20,7 @@ import {ReportDialogComponent} from './report-dialog/report-dialog.component';
 import {DatePipe} from '@angular/common';
 import {NotificationService} from '../../shared/services/notification.service';
 import {AuthService} from '../../shared/services/auth.service';
+import {SigninDialogComponent} from '../../shared/signin-dialog/signin-dialog.component';
 
 @Component({
   selector: 'app-question',
@@ -305,49 +306,81 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   like(simpleQuestion: SimpleQuestion) {
-    // TODO: show sign up pop up
-    if (this.authService.isGuest()) { return; }
+    if (this.authService.isGuest()) {
+      this.dialog.open(SigninDialogComponent, {
+        hasBackdrop: true,
+        data: {
+          title: 'Like this question?',
+          content: 'Sign in to make your opinion count.'
+        }
+      });
+      return;
+    }
 
     if (this.questionReactionStats.liked) {
-      //TODO:
-      console.log('already liked, NOP, todo: unlike');
+      this.gameService.unlike(simpleQuestion.questionId)
+        .subscribe(() => {
+            this.questionReactionStats.liked = false;
+            this.questionReactionStats.likes--;
+            this.notificationService.onLeftBottom('Removed from liked pictures');
+          },
+          (error: ErrorResponse) => {
+            console.log(error);
+          });
+    } else {
+      this.gameService.like(simpleQuestion.questionId)
+        .subscribe(() => {
+            if (this.questionReactionStats.disliked) {
+              this.questionReactionStats.disliked = false;
+              this.questionReactionStats.dislikes--;
+            }
+            this.questionReactionStats.liked = true;
+            this.questionReactionStats.likes++;
+            this.notificationService.onLeftBottom('Added to liked pictures');
+          },
+          (error: ErrorResponse) => {
+            console.log(error);
+          });
     }
-    this.gameService.like(simpleQuestion.questionId)
-      .subscribe(() => {
-          if (this.questionReactionStats.disliked) {
-            this.questionReactionStats.disliked = false;
-            this.questionReactionStats.dislikes--;
-          }
-          this.questionReactionStats.liked = true;
-          this.questionReactionStats.likes++;
-          this.notificationService.onLeftBottomOk('Added to liked pictures');
-        },
-        (error: ErrorResponse) => {
-          console.log(error);
-        });
   }
 
   dislike(simpleQuestion: SimpleQuestion) {
-    // TODO: show sign up pop up
-    if (this.authService.isGuest()) { return; }
+    if (this.authService.isGuest()) {
+      this.dialog.open(SigninDialogComponent, {
+        hasBackdrop: true,
+        data: {
+          title: 'Don\'t like this question?',
+          content: 'Sign in to make your opinion count.'
+        }
+      });
+      return;
+    }
 
     if (this.questionReactionStats.disliked) {
-      //TODO:
-      console.log('already disliked, NOP, todo: remove dislike');
+      this.gameService.undislike(simpleQuestion.questionId)
+        .subscribe(() => {
+            this.questionReactionStats.disliked = false;
+            this.questionReactionStats.dislikes--;
+            this.notificationService.onLeftBottom('Dislike removed');
+          },
+          (error: ErrorResponse) => {
+            console.log(error);
+          });
+    } else {
+      this.gameService.dislike(simpleQuestion.questionId)
+        .subscribe(() => {
+            if (this.questionReactionStats.liked) {
+              this.questionReactionStats.liked = false;
+              this.questionReactionStats.likes--;
+            }
+            this.questionReactionStats.disliked = true;
+            this.questionReactionStats.dislikes++;
+            this.notificationService.onLeftBottom('You dislike this picture');
+          },
+          (error: ErrorResponse) => {
+            console.log(error);
+          });
     }
-    this.gameService.dislike(simpleQuestion.questionId)
-      .subscribe(() => {
-          if (this.questionReactionStats.liked) {
-            this.questionReactionStats.liked = false;
-            this.questionReactionStats.likes--;
-          }
-          this.questionReactionStats.disliked = true;
-          this.questionReactionStats.dislikes++;
-          this.notificationService.onLeftBottomOk('You dislike this picture');
-        },
-        (error: ErrorResponse) => {
-          console.log(error);
-        });
   }
 
   startTimer() {

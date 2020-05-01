@@ -15,6 +15,13 @@ export class NotificationService {
       { horizontalPosition: 'left', duration: 5000 });
   }
 
+  onLeftBottom(message: string) {
+    this.snackBar.open(
+      message,
+      '',
+      { horizontalPosition: 'left', duration: 3000 });
+  }
+
   somethingUnexpectedHappen() {
     this.onLeftBottomOk('Something unexpected happened. Try again later.');
   }

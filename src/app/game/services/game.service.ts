@@ -148,10 +148,24 @@ export class GameService extends AbstractService {
       );
   }
 
+  unlike(questionId: string) {
+    return this.http.delete(`${this.apiProtected()}/question-reactions/unlike/${questionId}`)
+      .pipe(
+        catchError( err => this.handleError('unliking question failed', err))
+      );
+  }
+
   dislike(questionId: string) {
     return this.http.post(`${this.apiProtected()}/question-reactions/dislike/${questionId}`, null)
       .pipe(
         catchError( err => this.handleError('disliking question failed', err))
+      );
+  }
+
+  undislike(questionId: string) {
+    return this.http.delete(`${this.apiProtected()}/question-reactions/undislike/${questionId}`)
+      .pipe(
+        catchError( err => this.handleError('undisliking question failed', err))
       );
   }
 
