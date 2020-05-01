@@ -185,8 +185,8 @@ export class GameService extends AbstractService {
       );
   }
 
-  nextUserQuestion() {
-    return this.http.get<SimpleUserQuestion>(`${this.apiProtected()}/user-questions/next`)
+  nextUserQuestion(afterReporting: boolean) {
+    return this.http.get<SimpleUserQuestion>(`${this.apiProtected()}/user-questions/next?afterReporting=${afterReporting}`)
       .pipe(
         catchError( err => this.handleError('fetching next user question failed', err))
       );

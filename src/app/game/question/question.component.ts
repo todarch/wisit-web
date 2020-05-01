@@ -74,7 +74,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     // console.log('on after view init', this.card);
-    this.fetchNewQuestion();
+    this.fetchNewQuestion(false);
   }
 
   imageLoaded() {
@@ -82,11 +82,11 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.startTimer();
   }
 
-  private fetchNewQuestion() {
+  private fetchNewQuestion(afterReporting: boolean) {
     if (this.authService.isGuest()) {
       this. newQuestion();
     } else {
-      this.newUserQuestion();
+      this.newUserQuestion(afterReporting);
     }
   }
 
@@ -107,9 +107,9 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       );
   }
 
-  private newUserQuestion() {
+  private newUserQuestion(afterReporting: boolean) {
     this.showOverlay();
-    this.gameService.nextUserQuestion()
+    this.gameService.nextUserQuestion(afterReporting)
       .subscribe((simpleUserQuestion: SimpleUserQuestion) => {
           this.userQuestionId = simpleUserQuestion.userQuestionId;
           this.onNewQuestion(simpleUserQuestion.preparedQuestion);
@@ -172,8 +172,11 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         this.closeOverlay();
       },
       (error: ErrorResponse) => {
-        console.log(error);
         this.closeOverlay();
+        if (error.httpStatusCode === 404) {
+          this.notificationService.onLeftBottom('Previous question was reported and removed.');
+          this.fetchNewQuestion(true);
+        }
       }
     );
   }
@@ -237,7 +240,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   next() {
     this.questionType = this.pickOne();
-    this.fetchNewQuestion();
+    this.fetchNewQuestion(false);
     this.questionReactionStats = QuestionComponent.defaultStats();
   }
 
@@ -296,7 +299,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.notificationService.onLeftBottomOk('The question is reported. Thank you.');
-        this.fetchNewQuestion();
+        this.fetchNewQuestion(true);
       }
     });
   }
