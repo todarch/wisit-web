@@ -166,9 +166,10 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         questionType: this.questionType
       }
     }).subscribe(
-      (answer: UserQuestionAnswer) => {
-        this.correctAnswer = answer.questionAnswer.correctChoice;
-        this.givenAnswer = answer.questionAnswer.givenChoice;
+      (userQuestionAnswer: UserQuestionAnswer) => {
+        const answer = userQuestionAnswer.questionAnswer;
+        this.correctAnswer = answer.correctChoice;
+        this.givenAnswer = answer.givenChoice;
         this.questionAnswered.emit({ question: this.simpleQuestion, answer });
         this.closeOverlay();
       },
