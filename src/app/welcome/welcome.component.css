@@ -1,11 +1,10 @@
 .header-headline {
   align-content: center;
-  padding-top: 60px;
-  padding-bottom: 60px;
-  margin: -19px -20px;
+  padding: 60px 20px;
+  margin: -25px;
   text-align: center;
-  background-color: #3f51b5;
   color: #fff;
+  background: #3f51b5 linear-gradient(145deg, #202983, #7582cb);
 }
 
 .mat-h1 {
@@ -36,7 +35,25 @@ main {
   margin: auto;
 }
 
-img {
+.full-size {
   max-width: 100%;
   max-height: 100%;
+}
+
+.question-card {
+  margin: auto;
+  max-width: 600px;
+}
+
+.mat-card-content {
+  margin-bottom: 0;
+}
+
+.choice-button {
+  width: 50%;
+  text-align: left;
+}
+
+.welcome-text {
+  margin-bottom: 20px;
 }

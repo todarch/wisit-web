@@ -1,18 +1,42 @@
 <div class="header-headline">
-  <h1 class="mat-h1">Where IS IT?</h1>
-  <h2 style="font-size: 18px; font-weight: 300; line-height: 28px; margin: 15px 0 25px;">
-    How well do you know the world around yourself?
-  </h2>
 
-  <button mat-raised-button [routerLink]="['/game']">
-    Play now
-  </button>
+  <div fxLayout="row wrap" fxLayoutAlign="space-evenly start">
+    <div class="welcome-text">
+      <h1 class="mat-h1">
+        <span [style.color]="color">W</span>here <span [style.color]="color">is it</span>?
+      </h1>
+      <h2 style="font-size: 18px; font-weight: 300; line-height: 28px; margin: 15px 0 25px;">
+        How well do you know the world around yourself?
+      </h2>
+      <button mat-raised-button [routerLink]="['/game']">
+        Play now
+      </button>
+    </div>
+
+    <div>
+      <mat-card class="question-card">
+        <div class="image-holder">
+          <img mat-card-image
+               src="{{picUrl}}"
+               alt="picture of a location">
+        </div>
+        <mat-card-content>
+          <ng-container *ngFor="let choice of choices">
+            <button mat-button class="choice-button" disabled="true">
+              <mat-icon>crop_square</mat-icon>
+              {{choice | uppercase}}</button>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
 </div>
 
 <main>
   <div class="row" fxLayout="row wrap" fxLayoutAlign="space-evenly start">
     <div class="row-img">
-      <img src="assets/img/globe-trotter.jpg">
+      <img class="full-size" src="assets/img/globe-trotter.jpg" alt="globe-trotter">
     </div>
     <div class="row-desc">
       <h2>Where to go next?</h2>
@@ -24,7 +48,7 @@
 
   <div class="row" fxLayout="row-reverse wrap" fxLayoutAlign="space-evenly start">
     <div class="row-img">
-      <img src="assets/img/photographer.jpg">
+      <img class="full-size" src="assets/img/photographer.jpg" alt="photographer">
     </div>
     <div class="row-desc">
       <h2>A picture is worth a thousand words</h2>
@@ -37,7 +61,7 @@
 
   <div class="row" fxLayout="row wrap" fxLayoutAlign="space-evenly start">
     <div class="row-img">
-      <img src="assets/img/question-mark.jpg">
+      <img class="full-size" src="assets/img/question-mark.jpg" alt="question-mark">
     </div>
     <div class="row-desc">
       <h2>Where is that place?</h2>
