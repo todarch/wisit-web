@@ -1,21 +1,38 @@
-<ng-container *ngIf="authService.isGuest()">
-  <app-info-box message="{{guestMessage}}"></app-info-box>
-</ng-container>
-<div fxLayout="row wrap" fxLayoutGap="30px grid" fxLayoutAlign="space-evenly start">
+<div fxLayout="row wrap" fxLayoutGap="10px grid" fxLayoutAlign="space-around start">
+  <div fxLayout="column" fxFlex.lt-lg="grow" class="pg-left-column">
+    <ng-container *ngIf="authService.isGuest()">
+      <app-info-box message="{{guestMessage}}"></app-info-box>
+    </ng-container>
+    <ng-container>
+      <app-user-info fxFlex="auto" [userScores]="userScores"></app-user-info>
+    </ng-container>
+  </div>
   <ng-container>
-    <app-user-info [userScores]="userScores"></app-user-info>
+    <app-question
+      (questionAnswered)="onQuestionAnswered($event)"
+      (newQuestionRequested)="onNewQuestionRequested()"
+    ></app-question>
   </ng-container>
   <ng-container>
-    <app-question (questionAnswered)="onQuestionAnswered($event)"></app-question>
-  </ng-container>
-  <ng-container>
-    <mat-tab-group>
+    <mat-tab-group class="pg-tabs">
       <mat-tab label="Info">
         <ng-template matTabContent>
+          <ng-container *ngIf="turnOff">
+            <mat-card class="info-box">{{hiddenMessage}}</mat-card>
+          </ng-container>
+          <ng-container *ngIf="!turnOff">
+            <app-question-info [picUrl]="question?.picUrl"></app-question-info>
+          </ng-container>
         </ng-template>
       </mat-tab>
       <mat-tab label="Comments">
         <ng-template matTabContent>
+          <ng-container *ngIf="turnOff">
+            <mat-card class="info-box">{{hiddenMessage}}</mat-card>
+          </ng-container>
+          <ng-container *ngIf="!turnOff">
+            <app-comments></app-comments>
+          </ng-container>
         </ng-template>
       </mat-tab>
     </mat-tab-group>

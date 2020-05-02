@@ -1,6 +1,7 @@
 .info-box {
   margin: auto auto 10px;
-  width: 80%;
+  color: rgb(97, 26, 21);
+  background-color: rgb(253, 236, 234);
 }
 
 .mat-card:not([class*=mat-elevation-z]) {

@@ -1,6 +1,6 @@
 .user-info-card {
   margin: auto;
-  width: 100%;
+  min-width: 200px;
 }
 
 .header-image {

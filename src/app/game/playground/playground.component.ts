@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {GameService, UserScores} from '../services/game.service';
+import {GameService, QuestionAnswer, SimpleQuestion, UserScores} from '../services/game.service';
 import {AuthService} from '../../shared/services/auth.service';
 
 @Component({
@@ -8,11 +8,17 @@ import {AuthService} from '../../shared/services/auth.service';
   styleUrls: ['./playground.component.css']
 })
 export class PlaygroundComponent implements OnInit {
+  question: SimpleQuestion;
+  private answer: QuestionAnswer;
   userScores: UserScores;
+  turnOff = true;
 
   guestMessage =
-    ` Hello visitor! Please make yourself at home. Just a gentle reminder that
-     we do not know you yet so the functionality is limited.`;
+    ` Hello Foreigner! Please make yourself at home. Just a gentle reminder that
+     your score is only informative, it will not be saved because you are not signed in.`;
+
+  hiddenMessage =
+    `This section will be revealed right after answering the question.`;
 
   constructor(private gameService: GameService,
               public authService: AuthService) { }
@@ -42,12 +48,19 @@ export class PlaygroundComponent implements OnInit {
   }
 
   onQuestionAnswered($event: any) {
-    const scoreDelta = $event;
+    this.question = $event.question;
+    this.answer = $event.answer;
+    this.turnOff = false;
+    const scoreDelta = this.answer.scoreDelta;
     this.userScores = {
       daily: this.userScores.daily + this.userScores.scoreDelta,
       weekly: this.userScores.weekly + this.userScores.scoreDelta,
       monthly: this.userScores.monthly + this.userScores.scoreDelta,
       scoreDelta
     };
+  }
+
+  onNewQuestionRequested() {
+    this.turnOff = true;
   }
 }

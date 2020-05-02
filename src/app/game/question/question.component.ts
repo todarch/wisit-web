@@ -29,6 +29,7 @@ import {SigninDialogComponent} from '../../shared/signin-dialog/signin-dialog.co
 })
 export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() questionAnswered = new EventEmitter();
+  @Output() newQuestionRequested = new EventEmitter();
 
   simpleQuestion = this.placeHolderQuestion();
   givenAnswer: Choice;
@@ -83,6 +84,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private fetchNewQuestion(afterReporting: boolean) {
+    this.newQuestionRequested.emit();
     if (this.authService.isGuest()) {
       this. newQuestion();
     } else {
@@ -99,10 +101,9 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         (error: ErrorResponse) => {
           if (error.httpStatusCode === 404) {
-            this.noMoreQuestions = true;
+            this.onNewQuestion(this.placeHolderQuestion());
           }
           console.log(error);
-          this.closeOverlay();
         }
       );
   }
@@ -168,7 +169,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       (answer: UserQuestionAnswer) => {
         this.correctAnswer = answer.questionAnswer.correctChoice;
         this.givenAnswer = answer.questionAnswer.givenChoice;
-        this.questionAnswered.emit(answer.questionAnswer.scoreDelta);
+        this.questionAnswered.emit({ question: this.simpleQuestion, answer });
         this.closeOverlay();
       },
       (error: ErrorResponse) => {
@@ -192,7 +193,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       (answer: QuestionAnswer) => {
         this.correctAnswer = answer.correctChoice;
         this.givenAnswer = answer.givenChoice;
-        this.questionAnswered.emit(answer.scoreDelta);
+        this.questionAnswered.emit({ question: this.simpleQuestion, answer});
         this.closeOverlay();
       },
       (error: ErrorResponse) => {

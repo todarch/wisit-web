@@ -1,0 +1,15 @@
+.info-box {
+  margin: auto auto 10px;
+  color: rgb(13, 60, 97);
+  background-color: rgb(232, 244, 253);
+}
+
+.pg-tabs {
+  width: 100%;
+  max-width: 340px;
+}
+
+.pg-left-column {
+  width: 100%;
+  max-width: 300px;
+}

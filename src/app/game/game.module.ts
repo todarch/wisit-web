@@ -11,10 +11,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { PlaygroundComponent } from './playground/playground.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import {SharedModule} from '../shared/shared.module';
+import { CommentsComponent } from './comments/comments.component';
+import { QuestionInfoComponent } from './question-info/question-info.component';
 
 
 @NgModule({
-  declarations: [QuestionComponent, LeaderboardComponent, BoardComponent, ReportDialogComponent, PlaygroundComponent, UserInfoComponent],
+  declarations: [QuestionComponent, LeaderboardComponent, BoardComponent, ReportDialogComponent, PlaygroundComponent, UserInfoComponent, CommentsComponent, QuestionInfoComponent],
   imports: [
     CommonModule,
     GameRoutingModule,
