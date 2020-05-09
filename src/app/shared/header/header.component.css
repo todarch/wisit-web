@@ -1,0 +1,13 @@
+header {
+  margin: -24px -20px 0;
+  padding-left: 20px;
+  background: #3f51b5 linear-gradient(145deg, #202983, #7582cb);
+}
+
+header h1 {
+  color: #fff;
+  font-weight: 300;
+  margin: 0;
+  padding: 28px 8px;
+  font-size: 20px;
+}

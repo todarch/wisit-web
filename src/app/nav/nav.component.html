@@ -48,8 +48,12 @@
           <mat-icon aria-label="Profile options">arrow_drop_down</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>Settings</button>
-          <button mat-menu-item (click)="doLogout()">Log out</button>
+          <a mat-menu-item [routerLink]="['/saved-list']">
+            <mat-icon aria-hidden="false">library_books</mat-icon>
+            Saved Pictures</a>
+          <a mat-menu-item (click)="doLogout()">
+            <mat-icon aria-hidden="false">exit_to_app</mat-icon>
+            Sign out</a>
         </mat-menu>
       </ng-container>
     </mat-toolbar>

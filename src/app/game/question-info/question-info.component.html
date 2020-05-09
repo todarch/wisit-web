@@ -1,1 +1,39 @@
-<a target="_blank" href="https://images.google.com/searchbyimage?image_url={{picUrl}}">Google Image Search</a>
+<div class="question-info-container"
+     fxLayout="row wrap"
+     fxLayoutGap="10px grid"
+     fxLayoutAlign="space-between center" >
+  <div matTooltip="Answered {{simpleQuestion.answeredCount}} times">
+    {{simpleQuestion.answeredCount}} times
+    •
+    {{toHumanDate(simpleQuestion.createdAt)}}
+  </div>
+  <div>
+    <button mat-button class="question-action-button"
+            matTooltip="{{questionReactionStats?.liked ? 'Unlike' : 'I like this'}}"
+            (click)="like(simpleQuestion)">
+      <mat-icon color="{{questionReactionStats?.liked ? 'primary' : ''}}">
+        thumb_up</mat-icon> {{questionReactionStats?.likes}}</button>
+
+    <button mat-button class="question-action-button"
+            matTooltip="{{questionReactionStats?.disliked ? 'Remove dislike' : 'I dislike this'}}"
+            (click)="dislike(simpleQuestion)">
+      <mat-icon color="{{questionReactionStats?.disliked ? 'primary' : ''}}">
+        thumb_down</mat-icon> {{questionReactionStats?.dislikes}}</button>
+
+    <button mat-button class="question-action-button"
+            (click)="toggleSave(simpleQuestion)">
+      <mat-icon *ngIf="!isSaved">library_add</mat-icon>
+      <mat-icon *ngIf="isSaved" color="primary">library_add_check</mat-icon>
+      {{isSaved ? 'SAVED' : 'SAVE' }}
+    </button>
+
+    <mat-menu #appMenu="matMenu">
+      <button mat-button (click)="openDialog()">
+        <mat-icon>flag</mat-icon>Report</button>
+    </mat-menu>
+
+    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+  </div>
+</div>

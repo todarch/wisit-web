@@ -6,10 +6,11 @@ import {UsernameComponent} from './username/username.component';
 import {MaterialModule} from '../material/material.module';
 import {SharedModule} from '../shared/shared.module';
 import {ReactiveFormsModule} from '@angular/forms';
+import { SavedListComponent } from './saved-list/saved-list.component';
 
 
 @NgModule({
-  declarations: [UsernameComponent],
+  declarations: [UsernameComponent, SavedListComponent],
   imports: [
     CommonModule,
     UserRoutingModule,

@@ -26,33 +26,9 @@
         </ng-container>
       </mat-card-content>
     </mat-card>
-    <div fxLayout="row" fxLayoutAlign="space-between center" >
-      <div matTooltip="Answered {{simpleQuestion.answeredCount}} times">
-        {{simpleQuestion.answeredCount}} times
-        •
-        {{toHumanDate(simpleQuestion.createdAt)}}
-      </div>
-      <div>
-        <button mat-button class="question-action-button"
-                matTooltip="{{questionReactionStats?.liked ? 'Unlike' : 'I like this'}}"
-                (click)="like(simpleQuestion)">
-          <mat-icon color="{{questionReactionStats?.liked ? 'primary' : ''}}">
-            thumb_up</mat-icon> {{questionReactionStats?.likes}}</button>
-        <button mat-button class="question-action-button"
-                matTooltip="{{questionReactionStats?.disliked ? 'Remove dislike' : 'I dislike this'}}"
-                (click)="dislike(simpleQuestion)">
-          <mat-icon color="{{questionReactionStats?.disliked ? 'primary' : ''}}">
-          thumb_down</mat-icon> {{questionReactionStats?.dislikes}}</button>
-        <mat-menu #appMenu="matMenu">
-          <button mat-button (click)="openDialog()">
-            <mat-icon>flag</mat-icon>Report</button>
-        </mat-menu>
-
-        <button mat-icon-button [matMenuTriggerFor]="appMenu">
-          <mat-icon>more_horiz</mat-icon>
-        </button>
-      </div>
-    </div>
+      <app-question-info
+        [simpleQuestion]="simpleQuestion"
+        (questionReported)="fetchNewQuestion(true)"></app-question-info>
     <mat-divider></mat-divider>
   </div>
 </ng-container>

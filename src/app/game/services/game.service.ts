@@ -10,6 +10,7 @@ import {AuthService} from '../../shared/services/auth.service';
 
 export interface SimpleQuestion {
   questionId: string;
+  picId: number;
   picUrl: string;
   choices: Choice[];
   createdAt: string;

@@ -1,0 +1,36 @@
+<app-header text="Saved Pictures"></app-header>
+
+<ng-container *ngIf="loading">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-container>
+
+<div class="listed-pictures-container">
+  <ng-container *ngIf="savedList?.length === 0">
+    You don't have any saved pictures. You will see them here once you start to save them.
+  </ng-container>
+
+  <ng-container *ngFor="let savedListItem of savedList">
+    <div class="listed-picture-card">
+      <mat-card #questionCard>
+        <mat-card-header>
+          <!--        <mat-card-title>{{savedListItem.cityName}}</mat-card-title>-->
+          <!--        <mat-card-subtitle>Dog Breed</mat-card-subtitle>-->
+        </mat-card-header>
+        <div class="image-holder">
+          <img mat-card-image
+               class="question-img"
+               src="{{savedListItem.picUrl}}"
+               alt="picture of a location">
+        </div>
+        <mat-card-content>
+          {{savedListItem.cityName}}
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="warn" (click)="removeFromList(savedListItem)">REMOVE FROM LIST</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+  </ng-container>
+
+</div>

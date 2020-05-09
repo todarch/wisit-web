@@ -3,7 +3,6 @@ import {
   Choice,
   GameService,
   QuestionAnswer,
-  QuestionReactionStats,
   QuestionType,
   SimpleQuestion,
   SimpleUserQuestion,
@@ -16,11 +15,9 @@ import {LoaderComponent} from '../../shared/loader/loader.component';
 import {DynamicOverlayService} from '../../shared/services/dynamic-overlay.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {ReportDialogComponent} from './report-dialog/report-dialog.component';
 import {DatePipe} from '@angular/common';
 import {NotificationService} from '../../shared/services/notification.service';
 import {AuthService} from '../../shared/services/auth.service';
-import {SigninDialogComponent} from '../../shared/signin-dialog/signin-dialog.component';
 
 @Component({
   selector: 'app-question',
@@ -36,7 +33,6 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   correctAnswer: Choice;
   noMoreQuestions = false;
   answeredInSeconds: number;
-  questionReactionStats = QuestionComponent.defaultStats();
 
   private userQuestionId;
   private answeringTimer;
@@ -45,15 +41,6 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('questionCard', { static: false, read: ElementRef }) card: ElementRef;
 
   private overlayRef: OverlayRef;
-
-  private static defaultStats(): QuestionReactionStats {
-    return {
-      likes: 0,
-      dislikes: 0,
-      liked: false,
-      disliked: false
-    };
-  }
 
   constructor(private gameService: GameService,
               private authService: AuthService,
@@ -83,7 +70,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.startTimer();
   }
 
-  private fetchNewQuestion(afterReporting: boolean) {
+  public fetchNewQuestion(afterReporting: boolean) {
     this.newQuestionRequested.emit();
     if (this.authService.isGuest()) {
       this. newQuestion();
@@ -126,25 +113,10 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       );
   }
 
-  private retrieveStats(questionId: string) {
-    if (!questionId) {
-      return;
-    }
-    this.gameService.stats(questionId).subscribe(
-      (stats: QuestionReactionStats) => {
-        this.questionReactionStats = stats;
-      },
-      (error: ErrorResponse) => {
-        console.log(error);
-      }
-    );
-  }
-
   onNewQuestion(question: SimpleQuestion) {
     this.simpleQuestion = question;
     this.givenAnswer = null;
     this.correctAnswer = null;
-    this.retrieveStats(question.questionId);
   }
 
   onAnswer(givenAnswer: Choice) {
@@ -243,7 +215,6 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   next() {
     this.questionType = this.pickOne();
     this.fetchNewQuestion(false);
-    this.questionReactionStats = QuestionComponent.defaultStats();
   }
 
   private pickOne(): QuestionType {
@@ -267,6 +238,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   private placeHolderQuestion(): SimpleQuestion {
     return  {
       questionId: '',
+      picId: 0,
       picUrl: '/assets/img/loading-placeholder.png',
       choices: [
         this.placeHolderChoice(),
@@ -286,106 +258,6 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       cityName: 'Loading',
       countryName: 'Loading'
     };
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(ReportDialogComponent, {
-      width: '50%',
-      minWidth: '300px',
-      data: {
-        name: 'Report question',
-        questionId: this.simpleQuestion.questionId
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.notificationService.onLeftBottomOk('The question is reported. Thank you.');
-        this.fetchNewQuestion(true);
-      }
-    });
-  }
-
-  toHumanDate(createdAt: string) {
-    return this.datePipe.transform(Date.parse(createdAt), 'mediumDate');
-  }
-
-  like(simpleQuestion: SimpleQuestion) {
-    if (this.authService.isGuest()) {
-      this.dialog.open(SigninDialogComponent, {
-        hasBackdrop: true,
-        data: {
-          title: 'Like this question?',
-          content: 'Sign in to make your opinion count.'
-        }
-      });
-      return;
-    }
-
-    if (this.questionReactionStats.liked) {
-      this.gameService.unlike(simpleQuestion.questionId)
-        .subscribe(() => {
-            this.questionReactionStats.liked = false;
-            this.questionReactionStats.likes--;
-            this.notificationService.onLeftBottom('Removed from liked pictures');
-          },
-          (error: ErrorResponse) => {
-            console.log(error);
-          });
-    } else {
-      this.gameService.like(simpleQuestion.questionId)
-        .subscribe(() => {
-            if (this.questionReactionStats.disliked) {
-              this.questionReactionStats.disliked = false;
-              this.questionReactionStats.dislikes--;
-            }
-            this.questionReactionStats.liked = true;
-            this.questionReactionStats.likes++;
-            this.notificationService.onLeftBottom('Added to liked pictures');
-          },
-          (error: ErrorResponse) => {
-            console.log(error);
-          });
-    }
-  }
-
-  dislike(simpleQuestion: SimpleQuestion) {
-    if (this.authService.isGuest()) {
-      this.dialog.open(SigninDialogComponent, {
-        hasBackdrop: true,
-        data: {
-          title: 'Don\'t like this question?',
-          content: 'Sign in to make your opinion count.'
-        }
-      });
-      return;
-    }
-
-    if (this.questionReactionStats.disliked) {
-      this.gameService.undislike(simpleQuestion.questionId)
-        .subscribe(() => {
-            this.questionReactionStats.disliked = false;
-            this.questionReactionStats.dislikes--;
-            this.notificationService.onLeftBottom('Dislike removed');
-          },
-          (error: ErrorResponse) => {
-            console.log(error);
-          });
-    } else {
-      this.gameService.dislike(simpleQuestion.questionId)
-        .subscribe(() => {
-            if (this.questionReactionStats.liked) {
-              this.questionReactionStats.liked = false;
-              this.questionReactionStats.likes--;
-            }
-            this.questionReactionStats.disliked = true;
-            this.questionReactionStats.dislikes++;
-            this.notificationService.onLeftBottom('You dislike this picture');
-          },
-          (error: ErrorResponse) => {
-            console.log(error);
-          });
-    }
   }
 
   startTimer() {
